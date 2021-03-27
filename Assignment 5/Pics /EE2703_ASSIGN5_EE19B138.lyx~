@@ -1,0 +1,1201 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 5
+\begin_inset Newline linebreak
+\end_inset
+
+Laplace equation
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+March 27, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Itemize
+Solve the Laplace equation of the electric potential (
+\begin_inset Formula $\phi)$
+\end_inset
+
+ in a resistor and hence, find the current density distribution.
+\end_layout
+
+\begin_layout Itemize
+Analyse the potential and temperature profile of the resistor.
+\end_layout
+
+\begin_layout Itemize
+Apply the 
+\begin_inset Quotes eld
+\end_inset
+
+Average of neighbors
+\begin_inset Quotes erd
+\end_inset
+
+ method to solve the Laplace equation and analyse the error present in the
+ method.
+\end_layout
+
+\begin_layout Section
+Theory:
+\end_layout
+
+\begin_layout Subsection
+The resistor problem:
+\end_layout
+
+\begin_layout Standard
+Let us consider a copper plate of dimensions 1 cm by 1 cm with a wire soldered
+ in the middle portion of the plate.
+ Also, the wire is maintained at a constant potential of 1 volt, the bottom
+ edge of the plate is grounded and the other edges of the plate are floating.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Screenshot from 2021-03-27 13-34-50.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+We have the following equations:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\vec{{j}}=\sigma\vec{{E}}$
+\end_inset
+
+ (Ohm's law)
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\vec{{E}}=-∇\phi$
+\end_inset
+
+ (Field-potential relation)
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $∇.\vec{{j}}=-\frac{∂\rho}{\partial t}$
+\end_inset
+
+ (Continuity equation)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clubbing up these equations, we have:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $∇^{2}\phi=\frac{1}{\sigma}\frac{\partial\rho}{\partial t}$
+\end_inset
+
+ (Assuming constant conductivity)
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+For DC currents, we have:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $∇^{2}\phi=0$
+\end_inset
+
+ (Laplace equation)
+\end_layout
+
+\begin_layout Subsection
+Solving the Laplace equation:
+\end_layout
+
+\begin_layout Standard
+For a 2-D surface, the Laplace equation can be written as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial^{2}\phi}{\partial x^{2}}+\frac{\partial^{2}\phi}{\partial y^{2}}=0
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Assuming the neighbouring potential values are known, we can write: 
+\begin_inset Formula 
+\[
+\frac{\partial\phi}{\partial x}\Bigr\rvert_{(x_{i},y_{j})}=\frac{\phi(x_{i+1/2},y_{j})-\phi(x_{i-1/2},y_{j})}{∆x}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+and hence:
+\begin_inset Formula 
+\[
+\frac{\partial^{2}\phi}{\partial x^{2}}\Bigr\rvert_{(x_{i},y_{j})}=\frac{\phi(x_{i+1},y_{j})-2\phi(x_{i},y_{j})+\phi(x_{i-1},y_{j})}{(∆x)^{2}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Similarly, for the partial derivative with respect to y, we have:
+\begin_inset Formula 
+\[
+\frac{\partial^{2}\phi}{\partial y^{2}}\Bigr\rvert_{(x_{i},y_{j})}=\frac{\phi(x_{i},y_{j+1})-2\phi(x_{i},y_{j})+\phi(x_{i},y_{j-1})}{(∆y)^{2}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Assuming same stepsize in both the axes (∆x=∆y), we have:
+\begin_inset Formula 
+\[
+\phi_{i,j}=\frac{\phi_{i,j+1}+\phi_{i,j-1}+\phi_{i+1,j}+\phi_{i-1,j}}{4}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This solution is the called as the 
+\series bold
+Average of neighbours.
+ 
+\series default
+If there exists a discrete solution for the potential, it should satisfy
+ this relationship.
+ So, the method is clear.
+ We have to guess a solution and carry out the averaging process until we
+ reach a convergence point (Max.
+ error < Threshold).
+ 
+\end_layout
+
+\begin_layout Subsection
+Boundary conditions:
+\end_layout
+
+\begin_layout Standard
+The following boundary conditions are given:
+\end_layout
+
+\begin_layout Enumerate
+The soldered wire is always maintained at potential of 1 volt.
+ (The circular region in the middle)
+\end_layout
+
+\begin_layout Enumerate
+The bottom edge of the plate is grounded, which means potential is 0 volt
+ there.
+\end_layout
+
+\begin_layout Enumerate
+The other three edges are floating, meaning current can't flow out of them
+ into the air.
+ Hence, the normal derivative of potential (
+\begin_inset Formula $\frac{\partial\phi}{\partial n}$
+\end_inset
+
+) is 0 at those edges.
+\end_layout
+
+\begin_layout Subsection
+Current density distribution:
+\end_layout
+
+\begin_layout Standard
+There will be current flowing from the soldered wire to the grounded edge
+ because of a potential drop.
+ However, the current distribution will be non-uniform because of the non-unifor
+m potential profile.
+ Current density (J) is given by:
+\begin_inset Formula 
+\[
+\vec{{J}}=-\sigma(∇\phi)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Based on the formula we had for derivatives, we can write:
+\begin_inset Formula 
+\[
+J_{x,ij}=\sigma\frac{\phi_{i,j-1}-\phi_{i,j+1}}{2(∆x)}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+J_{y,ij}=\sigma\frac{\phi_{i-1,j}-\phi_{i+1,j}}{2(\Delta y)}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+For simplicity, let's assume 
+\begin_inset Formula $\sigma=stepsize=∆x=∆y$
+\end_inset
+
+.
+ Hence, we will have:
+\begin_inset Formula 
+\[
+J_{x,ij}=\frac{\phi_{i,j-1}-\phi_{i,j+1}}{2}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+J_{y,ij}=\frac{\phi_{i-1,j}-\phi_{i+1,j}}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Temperature profile:
+\end_layout
+
+\begin_layout Standard
+Due to passage of currents, Joule's heating takes place and heat is liberated.
+ This heat increases the temperature of the copper plate.
+ However, this heating is not uniform and hence, the plate won't be in thermal
+ equilibrium.
+ Instead, it'll have a temperature profile.
+ Temperature (T) will satisfy the following equation:
+\begin_inset Formula 
+\[
+∇∙(k∇T)=-\frac{1}{\sigma}|J|^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Using the Averaging technique, we will have:
+\begin_inset Formula 
+\[
+\frac{T(x_{i+1},y_{j})-2T(x_{i},y_{j})+T(x_{i-1},y_{j})}{(\Delta x)^{2}}+\frac{T(x_{i},y_{j+1})-2T(x_{i},y_{j})+T(x_{i},y_{j-1})}{(∆y)^{2}}=-\frac{1}{\sigma k}|J|^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+From this we will have:
+\begin_inset Formula 
+\[
+T_{i,j}=\frac{T_{i,j+1}+T_{i,j-1}+T_{i+1,j}+T_{i-1,j}}{4}+\frac{(∆x)^{2}}{4\sigma k}|J|^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We know from the previous section that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\sigma=stepsize=∆x=∆y.$
+\end_inset
+
+ To simplify the equation, let's also assume that 
+\begin_inset Formula $\sigma=k$
+\end_inset
+
+ (Electrical conductivity = Thermal conductivity numerically).
+ Hence, we have:
+\begin_inset Formula 
+\[
+T_{i,j}=\frac{T_{i,j+1}+T_{i,j-1}+T_{i+1,j}+T_{i-1,j}}{4}+\frac{1}{4}|J|^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with J obtained from the gradient of potential (
+\begin_inset Formula $\phi).$
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The boundary conditions for temperature are:
+\end_layout
+
+\begin_layout Enumerate
+The soldered wire is maintained at 300 K (Room temperature).
+\end_layout
+
+\begin_layout Enumerate
+The grounded edge is maintained at 300 K (Room temp.).
+\end_layout
+
+\begin_layout Enumerate
+The normal gradient of temperature at the other three edges is 0.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Initially, the plate was at thermal equilibrium (The temperature was 300
+ K initially all over the plate).
+\end_layout
+
+\begin_layout Section
+Procedure:
+\end_layout
+
+\begin_layout Subsection
+Variables used:
+\end_layout
+
+\begin_layout Enumerate
+Nx = Number of X-axis divisions (No.
+ of columns)
+\end_layout
+
+\begin_layout Enumerate
+Ny = Number of Y-axis divisions (No.
+ of rows)
+\end_layout
+
+\begin_layout Enumerate
+rad = Radius of the central wire (In terms of the number of units)
+\end_layout
+
+\begin_layout Enumerate
+Niter = Number of iterations till which the averaging process is done
+\end_layout
+
+\begin_layout Standard
+In my code, the stepsize is assumed to be same in both the axes.
+ Hence, the dimensions ratio of the plate is dictated by the values of Nx,
+ Ny.
+ So, let's say the user wants a plate of 50cm by 50 cm to be analysed using
+ a stepsize of 0.7 cm, he should enter same values for Nx and Ny.
+ And that value should satisfy:
+\begin_inset Formula 
+\[
+\frac{50}{Nx}≤0.7
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In general, the user should enter Nx, Ny values such that:
+\begin_inset Formula 
+\[
+\frac{X-length}{Nx}≤Stepsize
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\frac{Y-length}{Ny}≤Stepsize
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The user cannot expect a square plate to be divided into a 5 x 7 grid in
+ my code because that leads to different stepsizes in the axes and the code
+ is not suited to work for different stepsizes.
+ The default values are Nx=25, Ny=25, rad=8 and Niter=1500.
+ All the plots which are present in this report are generated with these
+ default values.
+\end_layout
+
+\begin_layout Subsection
+Solving the Laplace equation:
+\end_layout
+
+\begin_layout Standard
+The potential and the temperature profiles are obtained using the Averaging
+ the neighbors algorithm.
+ The following code snippet does that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for k in range(Niter):
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+    oldphi = phi.copy()
+\end_layout
+
+\begin_layout Plain Layout
+
+    phi[1:Ny-1,1:Nx-1] = 0.25*(Sum of neighbours)
+\end_layout
+
+\begin_layout Plain Layout
+
+    phi[0,:Nx]=0.0; phi[:Ny,0]=phi[:Ny,1]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+    phi[:Ny,Nx-1]=phi[:Ny,Nx-2]; phi[Ny-1,:Nx]=phi[Ny-2,:Nx]
+\end_layout
+
+\begin_layout Plain Layout
+
+    phi[ii] = 1.0
+\end_layout
+
+\begin_layout Plain Layout
+
+    error[k]=np.max((np.abs(phi-oldphi)))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    Jx = 0.5*(phi[1:Ny-1,0:Nx-2]-phi[1:Ny-1,2:Nx]); 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Jy = 0.5*(phi[0:Ny-2,1:Nx-1]-phi[2:Ny,1:Nx-1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    heats = np.multiply(Jx,Jx)+np.multiply(Jy,Jy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    T[1:Ny-1,1:Nx-1] = 0.25*(Sum of neighbours+heats)
+\end_layout
+
+\begin_layout Plain Layout
+
+    T[0,:Nx]=300.0; T[:Ny,0]=T[:Ny,1]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+    T[:Ny,Nx-1]=T[:Ny,Nx-2]; T[Ny-1,:Nx]=T[Ny-2,:Nx]
+\end_layout
+
+\begin_layout Plain Layout
+
+    T[ii] = 300.0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+In the actual code, the sum of neighbours is actually calculated 
+\end_layout
+
+\begin_layout Plain Layout
+
+by adding the neighbour matrix slices.
+ Here, it is just written 
+\end_layout
+
+\begin_layout Plain Layout
+
+because of space constraints.
+\end_layout
+
+\begin_layout Plain Layout
+
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Error analysis:
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+At every iteration, the maximum absolute error between the new potential
+ values and old potential values is calculated and stored in an array named
+ 
+\begin_inset Quotes eld
+\end_inset
+
+error
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The errors are plotted against the iteration number using 
+\begin_inset Quotes eld
+\end_inset
+
+Semilogy
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Loglog
+\begin_inset Quotes erd
+\end_inset
+
+ commands.
+ Also, the semilogy plot will almost become a straight line after 500 iterations
+ implying the error is of the form:
+\series default
+
+\begin_inset Formula 
+\[
+log(error_{k})=A+Bk
+\]
+
+\end_inset
+
+
+\series medium
+Now, we can find the fit (A, B) which satisfies this equation.
+ We have to find two fits:
+\end_layout
+
+\begin_layout Enumerate
+Fit 1: Training data: Data corresponding to all the iterations
+\end_layout
+
+\begin_layout Enumerate
+Fit 2: Training data: Data corresponding to all the iterations excluding
+ the first 500
+\end_layout
+
+\begin_layout Standard
+Writing the equation in matrix form, we will have:
+\begin_inset Formula 
+\[
+\left(\begin{array}{cc}
+1 & 0\\
+1 & 1\\
+1 & 2\\
+... & ...\\
+1 & Niter-2\\
+1 & Niter-1
+\end{array}\right)\text{\ensuremath{\left(\begin{array}{c}
+A\\
+B
+\end{array}\right)=\left(\begin{array}{c}
+log(error_{0})\\
+log(error_{1})\\
+log(error_{2})\\
+...\\
+log(error_{Niter-2})\\
+log(error_{Niter-1})
+\end{array}\right)}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This equation is fo the form:
+\begin_inset Formula 
+\[
+M.x=y
+\]
+
+\end_inset
+
+For fit 2, the matrix will start from 501, 502,...Niter-1.
+ That's the only difference.
+ Now, to solve for the 
+\begin_inset Formula $x$
+\end_inset
+
+ vector (A, B), let's use the lstsq() function of the linear algebra module
+ provided by the Numpy library.
+ The following code snippet does that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+itervals = np.array([i for i in range(0,Niter)]); itervals.shape = (Niter,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+A = np.c_[np.ones((Niter,1)),itervals]
+\end_layout
+
+\begin_layout Plain Layout
+
+b = np.log(error)
+\end_layout
+
+\begin_layout Plain Layout
+
+fit1 = np.linalg.lstsq(A,b,rcond=None)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+fit2 = np.linalg.lstsq(A[501:Niter],b[501:Niter],rcond=None)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+fit1_vals = np.dot(A,fit1)
+\end_layout
+
+\begin_layout Plain Layout
+
+fit2_vals = np.dot(A[501:Niter],fit2)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Plots:
+\end_layout
+
+\begin_layout Standard
+The following plots are to be plotted:
+\end_layout
+
+\begin_layout Enumerate
+Initial potential contour 
+\end_layout
+
+\begin_layout Enumerate
+Final potential contour
+\end_layout
+
+\begin_layout Enumerate
+3D surface plot of the potential
+\end_layout
+
+\begin_layout Enumerate
+Semilogy plot of the error and the fits vs iteration number
+\end_layout
+
+\begin_layout Enumerate
+Loglog plot of the error vs iteration number
+\end_layout
+
+\begin_layout Enumerate
+Vector plot of the current density 
+\end_layout
+
+\begin_layout Enumerate
+Temperature profile contour
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Observations and plots:
+\end_layout
+
+\begin_layout Subsection
+Initial potential contour:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_0.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Initially, the potential is zero at all points except the wire.
+ The wire is at 1 volt
+\end_layout
+
+\begin_layout Subsection
+Final potential contour:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_1.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+After the averaging is done and the boundary conditions are satisfied, the
+ potential becomes much more smoother 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+3D surface potential plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_2.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The 2D contour matches with the 3D plot exactly and both the contours follow
+ the boundary conditions as well
+\end_layout
+
+\begin_layout Subsection
+Semilogy plot of the Error vs Iteration number:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_3.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The exact error is different from the fit for low values of iteration.
+ However, the fit is somewhat accurate for higher values of iteration
+\end_layout
+
+\begin_layout Subsection
+Loglog plot of the Error vs Iteration number:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_4.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+On the loglog plot, the error is intially decreasing linearly with respect
+ to the iteration number.
+ However, the plot reaches an exponential regime for higher values of iteration
+\end_layout
+
+\begin_layout Subsection
+Vector plot of the current density:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_5.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As expected, the currents are only existing in the region between the wire
+ and the grounded edge.
+ The current density values in the floating regions are practically negligible
+\end_layout
+
+\begin_layout Subsection
+Temperature profile contour:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figure_6.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The temperature is high in the region where the currents primarily exist
+ and is almost 300 K in the region where the currents are near zero.
+ Hence, the Laplace equation of temperature is satisfied properly
+\end_layout
+
+\begin_layout Section
+Results and conclusions:
+\end_layout
+
+\begin_layout Enumerate
+The potential contour followed the boundary conditions properly and the
+ plot was also smooth.
+\end_layout
+
+\begin_layout Enumerate
+The currents were primarily concentrated near the grounded edge.
+ It makes sense as that is where the potential gradient existed in significant
+ values.
+\end_layout
+
+\begin_layout Enumerate
+The temperature was higher than room temperature near the grounded region
+ because the currents primarily existed there and hence, most of the Joule's
+ heating took place there.
+\end_layout
+
+\begin_layout Enumerate
+The error initially was reducing steeply but reduced linearly after 500th
+ iteration on the Semilogy plot.
+\end_layout
+
+\begin_layout Enumerate
+Judging by the time constant (Time constant = 1/B = 70.33), we can say this
+ method is not so preferable as the time taken by the error to settle is
+ very high.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,1426 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 4
+\begin_inset Newline linebreak
+\end_inset
+
+Fourier aproximations
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+March 10, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Itemize
+Plot functions e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x 
+\end_layout
+
+\end_inset
+
+and cos(cos(x)) for x ϵ [-2
+\begin_inset Formula $\pi$
+\end_inset
+
+, 4
+\begin_inset Formula $\pi$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+Find first 51 fourier coefficients of both the functions using direct 
+\begin_inset Newline linebreak
+\end_inset
+
+integration and least squares approximation.
+ 
+\begin_inset Newline newline
+\end_inset
+
+(Training data for least squares approximation: Function values for 
+\begin_inset Newline newline
+\end_inset
+
+x ϵ [0, 2
+\begin_inset Formula $\pi$
+\end_inset
+
+))
+\end_layout
+
+\begin_layout Itemize
+Plot function values obtained using both the set of coefficients for 
+\begin_inset Newline newline
+\end_inset
+
+x ϵ [-2
+\begin_inset Formula $\pi$
+\end_inset
+
+, 4
+\begin_inset Formula $\pi$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+Theory:
+\end_layout
+
+\begin_layout Subsection
+Functions: e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+ and cos(cos(x)):
+\end_layout
+
+\begin_layout Standard
+These two real functions are to be fitted using fourier series coefficients
+ over the interval [0, 2
+\begin_inset Formula $\pi)$
+\end_inset
+
+ as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+a_{0}+\sum_{n=1}^{\infty}\{a_{n}cos(nx)+b_{n}sin(nx)\}
+\end{equation}
+
+\end_inset
+
+where the coefficients are given by the formulae:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{0}=\cfrac{1}{2\pi}\int_{0}^{2\pi}f(x)dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{n}=\frac{1}{\pi}\int_{0}^{2\pi}f(x)cos(nx)dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+b_{n}=\frac{1}{\pi}\int_{0}^{2\pi}f(x)sin(nx)dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Fourier coefficients vector:
+\end_layout
+
+\begin_layout Standard
+The first 51 coefficients of the given functions are calculated using the
+ integration formulae given above.
+ The column vector is of the form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{pmatrix}a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{pmatrix}
+\]
+
+\end_inset
+
+We also know from Eqn.(1):
+\begin_inset Formula 
+\begin{equation}
+a_{0}+\sum_{n=1}^{25}a_{n}cos(nx)+\sum_{n=1}^{25}b_{n}sin(x)≈f(x)
+\end{equation}
+
+\end_inset
+
+Hence, in matrix form, the equation would be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cos(x_{1}) & sin(x_{1}) & ... & cos(25x_{1}) & sin(25x_{1})\\
+1 & cos(x_{2}) & sin(x_{2}) & ... & cos(25x_{2}) & sin(25x_{2})\\
+... & ... & ... & ... & ... & ...\\
+1 & cos(x_{400}) & sin(x_{400}) & ... & cos(25x_{400}) & sin(25x_{400})
+\end{array}\right)\text{\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{array}\right)≈\left(\begin{array}{c}
+f(x_{1})\\
+f(x_{2})\\
+...\\
+f(x_{400})
+\end{array}\right)}
+\]
+
+\end_inset
+
+In this way, by generating the matrix and the coefficients vector, the function
+ values can be computed for a number of values of 
+\shape italic
+'x'
+\shape default
+.
+\end_layout
+
+\begin_layout Subsection
+Least squares approximation:
+\end_layout
+
+\begin_layout Standard
+We know the integration formulae for the fourier coefficients and we used
+ it to find the approximate function values in the previous section.
+\begin_inset Newline newline
+\end_inset
+
+What we could also do is we can find a least squares solution for the coefficien
+ts vector by forming the matrix and by having the function values beforehand.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cos(x_{1}) & sin(x_{1}) & ... & cos(25x_{1}) & sin(25x_{1})\\
+1 & cos(x_{2}) & sin(x_{2}) & ... & cos(25x_{2}) & sin(25x_{2})\\
+... & ... & ... & ... & ... & ...\\
+1 & cos(x_{400}) & sin(x_{400}) & ... & cos(25x_{400}) & sin(25x_{400})
+\end{array}\right)\text{\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{array}\right)=\left(\begin{array}{c}
+f(x_{1})\\
+f(x_{2})\\
+...\\
+f(x_{400})
+\end{array}\right)}
+\]
+
+\end_inset
+
+Here, the matrix is called 
+\shape italic
+'A', 
+\shape default
+the coefficients vector '
+\shape italic
+c' 
+\shape default
+and the 
+\begin_inset Newline linebreak
+\end_inset
+
+values vector 
+\shape italic
+'b'.
+ 
+\shape default
+Once, we have matrix '
+\shape italic
+A' 
+\shape default
+and vector
+\shape italic
+ 'b', 
+\shape default
+we can find the least
+\begin_inset Newline linebreak
+\end_inset
+
+squares fit for vector
+\shape italic
+ 'c'.
+ 
+\shape default
+The values we get for the coefficients in this manner won't be the exact
+ same values we obtained by the integration formulae.
+ 
+\begin_inset Newline linebreak
+\end_inset
+
+But these coefficient values minimise the least square error.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Procedure:
+\end_layout
+
+\begin_layout Standard
+According to the assignment, the following objectives must be completed:
+\end_layout
+
+\begin_layout Enumerate
+Functions e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+and cos(cos(x)) should be plotted with 
+\shape italic
+'x' 
+\shape default
+ranging from the interval [-2
+\begin_inset Formula $\pi,$
+\end_inset
+
+4
+\begin_inset Formula $\pi).$
+\end_inset
+
+ The expected fourier plots should also be plotted on the respective figures.
+ The code, by default, considers 400 equally spaced points in this interval
+ as the discrete values of 
+\shape italic
+'x'.
+ 
+\shape default
+However, it could also be passed on by the user as a command line argument.
+ (First argument after the python file name).
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Two user-defined functions must also be created to return the value of e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+ and cos(cos(x)) for an array 
+\shape italic
+'x'.
+\end_layout
+
+\begin_layout Enumerate
+The first 51 fourier coefficients: 
+\begin_inset Formula 
+\[
+\begin{pmatrix}a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{pmatrix}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+must be obtained by default in this vector form.
+ However, the number of fourier coefficients needed to be computed can also
+ be passed as a command line argument.
+\begin_inset Newline newline
+\end_inset
+
+(Second argument after the python file name.
+ If the user wants the coefficients, say till a
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+
+, b
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+
+, he should enter 50 as the command line argument).
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+These fourier coefficients are to be computed using the in-built integrator
+ of python and with the help of two user functions:
+\begin_inset Formula 
+\[
+u(x,k)=f(x)cos(kx)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v(x,k)=f(x)sin(kx)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Python inbuilt function:
+\begin_inset listings
+lstparams "language=Python"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import scipy.integrate as sp                
+\end_layout
+
+\begin_layout Plain Layout
+
+# Library that contains the inbuilt integrator
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+integ = sp.quad(u,0,2*np.pi,args=(k,func))  
+\end_layout
+
+\begin_layout Plain Layout
+
+# 'Quad' function is the integrator function 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The fourier coefficients obtained from integration formulae should be plotted
+ using 
+\shape italic
+semilog
+\shape default
+ and 
+\shape italic
+loglog
+\shape default
+ plot functions of python with respect to their indices.
+ Since, we need to plot the logarithm of the fourier coefficients with respect
+ to their indices, logarithms of the absolute values of the fourier coefficients
+ are plotted since the fourier coefficients can also be negative sometimes.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The fourier coefficients should again be calculated, but now using the least
+ squares approach.
+ The matrix equation is:
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cos(x_{1}) & sin(x_{1}) & ... & cos(25x_{1}) & sin(25x_{1})\\
+1 & cos(x_{2}) & sin(x_{2}) & ... & cos(25x_{2}) & sin(25x_{2})\\
+... & ... & ... & ... & ... & ...\\
+1 & cos(x_{400}) & sin(x_{400}) & ... & cos(25x_{400}) & sin(25x_{400})
+\end{array}\right)\text{\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{25}\\
+b_{25}
+\end{array}\right)=\left(\begin{array}{c}
+f(x_{1})\\
+f(x_{2})\\
+...\\
+f(x_{400})
+\end{array}\right)}
+\]
+
+\end_inset
+
+with x ϵ [0, 2
+\begin_inset Formula $\pi$
+\end_inset
+
+) and the python function used to do this is the inbuilt least squares function.
+ Again, the default number of samples for 'x' is 400 but it could also be
+ passed as a command line argument (It is the same first argument after
+ the python file name).
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Python inbuilt function: 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset listings
+lstparams "language=Python"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import scipy                
+\end_layout
+
+\begin_layout Plain Layout
+
+# Library that contains the inbuilt least squares function
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+coeff_vec_exp_lst = scipy.linalg.lstsq(mat_temp,expon(vectemp))[0] 
+\end_layout
+
+\begin_layout Plain Layout
+
+# 'lstsq' function is the least squares function 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The coefficients obtained by integration and by least squares approximation
+ should be compared and the largest deviation should also be printed.
+\end_layout
+
+\begin_layout Enumerate
+The function values should be found using fourier series equation:
+\begin_inset Formula 
+\[
+a_{0}+\sum_{n=1}^{25}a_{n}cos(nx)+\sum_{n=1}^{25}b_{n}sin(x)≈f(x)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The function values obtained by both the sets of coefficients (Integration
+ and least squares approximation) are to be compared with the expected fourier
+ plots.
+\end_layout
+
+\begin_layout Standard
+Note: If you want to pass a non_default value to only one of the arguments
+ in {Number of 'x' samples, Max.
+ coefficient index}, pass the default value to the other argument.
+ Passing only one different value will create ambuiguity and hence, the
+ code will not work.
+ 
+\end_layout
+
+\begin_layout Section
+Code and functions:
+\end_layout
+
+\begin_layout Standard
+The functions which are explained below are coded based on
+\begin_inset Newline linebreak
+\end_inset
+
+
+\series bold
+
+\begin_inset Quotes eld
+\end_inset
+
+Modular programming
+\begin_inset Quotes erd
+\end_inset
+
+
+\series default
+.
+ The functions have a level of heirarchy in them, that is, one function
+ is called inside another function, which is called inside another and so
+ on.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In this way, each operation is coded as a seperate module and they can be
+ used individually as well (Instead of doing it all under one function call).
+\end_layout
+
+\begin_layout Subsection
+Functions 
+\shape italic
+expon(x)
+\shape default
+ and 
+\shape italic
+coscos(x)
+\shape default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def expon(a):     
+\end_layout
+
+\begin_layout Plain Layout
+
+    return np.exp(a)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def coscos(a):     
+\end_layout
+
+\begin_layout Plain Layout
+
+    return np.cos(np.cos(a))
+\end_layout
+
+\end_inset
+
+Both these functions take an input array (or scalar) 
+\shape italic
+'a' 
+\shape default
+and returns the corresponding function values as output array (or scalar).
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+For example, if the input array (a) is:
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+1\\
+2\\
+3\\
+4
+\end{array}\right)
+\]
+
+\end_inset
+
+then the output array for 
+\shape italic
+expon 
+\shape default
+function is (expon(a)):
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+e^{1}\\
+e^{2}\\
+e^{3}\\
+e^{4}
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Functions 
+\shape italic
+u(x,k,func)
+\shape default
+ and
+\shape italic
+ v(x,k,func)
+\shape default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def u(x,k,func):     
+\end_layout
+
+\begin_layout Plain Layout
+
+    val = func(x)*np.cos(k*x)     
+\end_layout
+
+\begin_layout Plain Layout
+
+    return val
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def v(x,k,func):     
+\end_layout
+
+\begin_layout Plain Layout
+
+    val = func(x)*np.sin(k*x) 
+\end_layout
+
+\begin_layout Plain Layout
+
+    return val
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+These two functions are the helper functions which are used to provide the
+ integrand terms of the fourier integral.
+ The arguments are:
+\end_layout
+
+\begin_layout Itemize
+x = The scalar value of the dependent variable (For example, it is the x
+ appearing in f(x)cos(5x))
+\end_layout
+
+\begin_layout Itemize
+k = The coefficient of x in the sine/cosine term (For example, k=5 in the
+ term f(x)cos(5x))
+\end_layout
+
+\begin_layout Itemize
+func = The function expression 'f' (For example, if the integrand is e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+cos(5x) then func is the 
+\shape italic
+expon
+\shape default
+ function)
+\end_layout
+
+\begin_layout Subsection
+Functions 
+\shape italic
+f_coeff_cos(k,func) 
+\shape default
+and
+\shape italic
+ f_coeff_sin(k,func)
+\shape default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def f_coeff_cos(k,func):
+\end_layout
+
+\begin_layout Plain Layout
+
+    integ = sp.quad(u,0,2*np.pi,args=(k,func))
+\end_layout
+
+\begin_layout Plain Layout
+
+    integ = integ[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    if k==0:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return integ/(2*np.pi)
+\end_layout
+
+\begin_layout Plain Layout
+
+    else:
+\end_layout
+
+\begin_layout Plain Layout
+
+        return integ/np.pi
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def f_coeff_sin(k,func):
+\end_layout
+
+\begin_layout Plain Layout
+
+    integ = sp.quad(v,0,2*np.pi,args=(k,func))
+\end_layout
+
+\begin_layout Plain Layout
+
+    integ = integ[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return integ/np.pi
+\end_layout
+
+\end_inset
+
+These functions do the integration process and return the fourier coefficients.
+ The arguments are:
+\end_layout
+
+\begin_layout Itemize
+k = The coefficient of x in sine/cosine term (For example, k=5 in f(x)cos(5x))
+\end_layout
+
+\begin_layout Itemize
+func = The function whose fourier coefficient is calculated (For example,
+ func is expon in e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+cos(5x))
+\end_layout
+
+\begin_layout Subsection
+Function 
+\shape italic
+coeff_vector(num,func):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def coeff_vector(num,func):
+\end_layout
+
+\begin_layout Plain Layout
+
+    vec = np.zeros((2*num+1,1))
+\end_layout
+
+\begin_layout Plain Layout
+
+    vec[0][0] = f_coeff_cos(0,func)
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(1,num+1):
+\end_layout
+
+\begin_layout Plain Layout
+
+        vec[2*i-1][0] = f_coeff_cos(i,func)
+\end_layout
+
+\begin_layout Plain Layout
+
+        vec[2*i][0] = f_coeff_sin(i,func)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return vec
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+This function calculates the first (2n+1) fourier coefficients and returns
+ it as a column vector.
+ The arguments are:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+num = The index till which the fourier coefficients are to be computed (For
+ example, if the fourier coefficients needed are a
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+
+,a
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+,b
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+,...,a
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+
+,b
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+
+then num=50)
+\end_layout
+
+\begin_layout Itemize
+func = The function whose fourier coefficient is calculated (For example,
+ func is expon in e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+cos(5x))
+\end_layout
+
+\begin_layout Subsection
+Function 
+\shape italic
+matrix_gen(num,x):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def matrix_gen(num,x):
+\end_layout
+
+\begin_layout Plain Layout
+
+    n = x.shape[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    mat = np.ones((n,1))
+\end_layout
+
+\begin_layout Plain Layout
+
+    for i in range(1,num+1):
+\end_layout
+
+\begin_layout Plain Layout
+
+        mat = np.c_[mat,np.cos(x*i)]
+\end_layout
+
+\begin_layout Plain Layout
+
+        mat = np.c_[mat,np.sin(x*i)]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return mat
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This function takes a column vector 
+\shape italic
+'x'
+\shape default
+ and returns this matrix: 
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cos(x_{1}) & sin(x_{1}) & ... & cos(px_{1}) & sin(px_{1})\\
+1 & cos(x_{2}) & sin(x_{2}) & ... & cos(px_{2}) & sin(px_{2})\\
+... & ... & ... & ... & ... & ...\\
+1 & cos(x_{n}) & sin(x_{n}) & ... & cos(px_{n}) & sin(px_{n})
+\end{array}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\shape italic
+'p' 
+\shape default
+is the maximum index of the coefficient the user desires for.
+ The arguments are:
+\end_layout
+
+\begin_layout Itemize
+num = p (or) the maximum index of the coefficient
+\end_layout
+
+\begin_layout Itemize
+x = The column vector containing discrete values of independent variable
+ 
+\shape italic
+'x'
+\end_layout
+
+\begin_layout Subsection
+Function 
+\shape italic
+fourier_func(num,x,func):
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def fourier_func(num,x,func):
+\end_layout
+
+\begin_layout Plain Layout
+
+    vec = coeff_vector(num,func)
+\end_layout
+
+\begin_layout Plain Layout
+
+    mat = matrix_gen(num,x)
+\end_layout
+
+\begin_layout Plain Layout
+
+    func_vals = np.dot(mat,vec)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return func_vals
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+This function takes a colum vector 
+\shape italic
+'x'
+\shape default
+, maximum index 
+\shape italic
+'num
+\shape default
+' and function name 
+\shape italic
+'func'
+\shape default
+ as input arguments, generates the coefficient vector using the 
+\shape italic
+coeff_vector(num,func)
+\shape default
+ function call, matrix using the 
+\shape italic
+matrix_gen(num,x) 
+\shape default
+function call and multiplies the matrix with the coefficient vector to generate
+ the function values vector.
+ In short it carries out the matrix equation given below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{cccccc}
+1 & cos(x_{1}) & sin(x_{1}) & ... & cos(px_{1}) & sin(px_{1})\\
+1 & cos(x_{2}) & sin(x_{2}) & ... & cos(px_{2}) & sin(px_{2})\\
+... & ... & ... & ... & ... & ...\\
+1 & cos(x_{n}) & sin(x_{n}) & ... & cos(px_{n}) & sin(px_{n})
+\end{array}\right)\text{\ensuremath{\left(\begin{array}{c}
+a_{0}\\
+a_{1}\\
+b_{1}\\
+...\\
+a_{p}\\
+b_{p}
+\end{array}\right)}=\ensuremath{\left(\begin{array}{c}
+f(x_{1})\\
+f(x_{2})\\
+...\\
+f(x_{n})
+\end{array}\right)}}
+\]
+
+\end_inset
+
+The input arguments are:
+\end_layout
+
+\begin_layout Itemize
+num = p (or) the maximum index of the coefficient
+\end_layout
+
+\begin_layout Itemize
+x = The column vector containing discrete values of independent variable
+ 
+\shape italic
+'x'
+\end_layout
+
+\begin_layout Itemize
+func = The function whose fourier coefficient is calculated (For example,
+ func is expon in e
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+cos(5x))
+\end_layout
+
+\begin_layout Section
+Observations and plots:
+\end_layout
+
+\begin_layout Subsection
+Exact vs Expected fourier plots:
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document

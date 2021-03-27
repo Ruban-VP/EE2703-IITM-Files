@@ -1,0 +1,20 @@
+.circuit
+R1 2 3 4
+# first element
+V1 4 5 6$$
+G1 2 3 4 5 6  # 3rd element
+V1 3 5 15e-68 # rrt
+C1 4 5 6e10
+# ends here
+R1 2 3 4
+R1 2 3 4
+R1 2 3 4
+R1 2 3 4
+R1 2 3 4
+R1 2 3 4^^
+R1 2 3%% 4
+.end
+ty
+gh
+
+

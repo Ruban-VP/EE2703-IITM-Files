@@ -1,0 +1,225 @@
+"""
+************** Python program to find the fourier coefficients of two given functions ************
+
+In this code, the first 51 fourier coefficents of functions exp(x) and cos(cos(x)) are found, the functions are plotted
+for certain samples of 'x' and the fourier coefficients are also plotted. The coefficients are obtained in two methods:
+
+1. Using integration formulae
+2. Using least squares approximation
+
+The function values are calculated using these coefficients as well and they are also plotted.
+
+Done by: V. Ruban Vishnu Pandian 
+Date of completion: 13/03/2021
+
+Command line usage: ipython3 EE2703_ASSIGN3_EE19B138.py <Non-default value for number of 'x' sample> <Non-default value for maximum coefficient index>
+
+The last two arguments are optional, but if they are entered, they must occur in pairs, i.e., if non-default value is passed
+only to one of the variables, then pass the default value to other variable as well. Passing only one value will create ambiguity.
+"""
+
+from __future__ import print_function
+from sys import argv, exit     
+import matplotlib.pyplot as plt
+import scipy.integrate as sp
+import scipy
+import numpy as np                  #Importing the libraries needed for the code
+
+N = 401
+num = 25
+arrow = "$\\rightarrow$"       #Creating some variables for further use
+
+if len(argv)>=4 or len(argv)==2:
+    print("\nInvalid number of command line arguments. Usage: %s" % argv)
+    print("Provide only valid arguments and remove/add the extra/required arguments.\n")
+    exit()       #If the number of arguments is not valid (It can be 1 or 3), then this error message is printed
+elif len(argv)==3:
+    try:
+        N_temp = int(argv[1])
+        num_temp = int(argv[2])
+    except:
+        print("\nThe non-default values passed are not valid. Pass valid arguments.\n")
+        exit()    #The non-default values (if entered any), are checked whether they are integers or not 
+
+    if N_temp<400 or num_temp<25:
+        print("\nThe number of 'x' samples should be atleast 400 and the max. coefficient index should be atleast 25.")
+        print("This ensures the fourier approximations are reasonable.")
+        print("Hence, please enter valid non-default arguments.\n")
+        exit()    #If the non-default values passed are less than the default values, this error message is printed
+    else:
+        N = N_temp+1;
+        num = num_temp;  #If everything goes well, the variables are just updated accordingly with the non-default vales
+
+"""
+Modular functions: 9 functions are coded below and each function is a module. Detailed explanations about these
+functions are provided in the report.
+"""
+def expon(a):
+    return np.exp(a)   #Function to return exp(x)
+
+def coscos(a):
+    return np.cos(np.cos(a))      #Function to return cos(cos(x))
+
+def u(x,k,func):
+    val = func(x)*np.cos(k*x)    #Helper function used in cosine term coefficient calculator fucntion  
+    return val
+
+def v(x,k,func):
+    val = func(x)*np.sin(k*x)    #Helper function used in sine term coefficient calculator fucntion
+    return val
+
+def f_coeff_cos(k,func):
+    integ = sp.quad(u,0,2*np.pi,args=(k,func))    
+    integ = integ[0]
+    if k==0:
+        return integ/(2*np.pi)
+    else: 
+        return integ/np.pi       #Function to calculate and return cosine term fourier coefficient
+
+def f_coeff_sin(k,func):
+    integ = sp.quad(v,0,2*np.pi,args=(k,func))
+    integ = integ[0]
+    return integ/np.pi           #Function to calculate and return sine term fourier coefficient
+
+def coeff_vector(num,func):
+    vec = np.zeros((2*num+1,1))
+    vec[0][0] = f_coeff_cos(0,func)
+    for i in range(1,num+1):
+        vec[2*i-1][0] = f_coeff_cos(i,func)
+        vec[2*i][0] = f_coeff_sin(i,func)      #Function to generate the coefficient column vector.
+    return vec                                 #Length of this vector to be generated is taken as an input 
+
+def matrix_gen(num,x):
+    n = x.shape[0]
+    mat = np.ones((n,1))
+    for i in range(1,num+1):
+        mat = np.c_[mat,np.cos(x*i)]
+        mat = np.c_[mat,np.sin(x*i)]
+    return mat                                 #Function to generate the matrix given in the assignment
+
+def fourier_func(num,x,func):
+    vec = coeff_vector(num,func)
+    mat = matrix_gen(num,x)
+    func_vals = np.dot(mat,vec)                #Function to calculate the function values using fourier coefficients
+    return func_vals                           #vector and matrix obtained from the previous two functions
+
+
+num_vec = np.array([[i for i in range(2*num+1)]])    
+num_vec = num_vec.T                       #The indices array (0,1,2...51 by default) is generated for plotting purposes
+
+vec = np.linspace(-2*np.pi,4*np.pi,N)
+vec = vec[:-1]; vec.shape = (N-1,1)       #The array containing samples of independent variable 'x' is generated 
+                                          #(Contains 400 samples by default) 
+vec_period = vec%(2*np.pi)                #The periodic array (with period = 2*pi) is generated by using the remainder operator 
+
+vectemp = np.linspace(0,2*np.pi,N)
+vectemp = vectemp[:-1]; vectemp.shape = (N-1,1) 
+#The training data array (for obtaining the least squares solution) is generated (Contains 400 samples by default) 
+
+mat_temp = matrix_gen(num,vectemp)
+coeff_vec_exp_integ = coeff_vector(num,expon)
+coeff_vec_coscos_integ = coeff_vector(num,coscos)
+coeff_vec_exp_lst = scipy.linalg.lstsq(mat_temp,expon(vectemp))[0]
+coeff_vec_coscos_lst = scipy.linalg.lstsq(mat_temp,coscos(vectemp))[0]
+#The matrix and the coefficients vectors are generated and will be used for plotting purposes
+
+coeff_error_exp = np.abs(coeff_vec_exp_integ-coeff_vec_exp_lst)
+coeff_error_coscos = np.abs(coeff_vec_coscos_integ-coeff_vec_coscos_lst)
+print('\nMaximum deviation in fourier coefficients (integration and least squares) of exp(x) is %e' % np.max(coeff_error_exp))
+print('Maximum deviation in fourier coefficients (integration and least squares) of cos(cos(x)) is %e\n' % np.max(coeff_error_coscos))
+#The maximum deviation in the absolute differences of the coefficients obtained due to integration and least squares
+#method is found and printed
+
+#10 expected figures are generated and plotted. The code to do that is given below:
+plt.figure(1)
+plt.semilogy(vec,expon(vec),'c')
+plt.semilogy(vec,expon(vec_period),'r')
+plt.legend(["Actual","Fourier"])
+plt.xlabel('x'+arrow)
+plt.ylabel('$e^x$'+arrow)
+plt.title('Q1: Actual function and expected fourier function ($e^x$)',fontsize=15)
+plt.grid(True)
+
+plt.figure(2)
+plt.plot(vec,coscos(vec),'c',linewidth=8)
+plt.plot(vec,coscos(vec_period),'r')
+plt.legend(["Actual","Fourier"])
+plt.xlabel('x'+arrow)
+plt.ylabel('cos(cos(x))'+arrow)
+plt.title('Q1: Actual function and expected fourier function (cos(cos(x)))',fontsize=13)
+plt.grid(True)
+
+plt.figure(3)
+plt.semilogy(num_vec,np.abs(coeff_vec_exp_integ),'ro')
+plt.semilogy(num_vec,np.abs(coeff_vec_exp_lst),'go',markersize=4)
+plt.legend(["Integration","Least squares"])
+plt.xlabel('n'+arrow)
+plt.ylabel('Absolute value of coefficients'+arrow)
+plt.title('Semilog plot of coefficients of $e^x$')
+plt.grid(True)
+
+plt.figure(4)
+plt.loglog(num_vec,np.abs(coeff_vec_exp_integ),'ro')
+plt.loglog(num_vec,np.abs(coeff_vec_exp_lst),'go',markersize=4)
+plt.legend(["Integration","Least squares"])
+plt.xlabel('n'+arrow)
+plt.ylabel('Absolute value of coefficients'+arrow)
+plt.title('Loglog plot of coefficients of $e^x$')
+plt.grid(True)
+
+plt.figure(5)
+plt.semilogy(num_vec,np.abs(coeff_vec_coscos_integ),'ro')
+plt.semilogy(num_vec,np.abs(coeff_vec_coscos_lst),'go',markersize=4)
+plt.legend(["Integration","Least squares"])
+plt.xlabel('n'+arrow)
+plt.ylabel('Absolute value of coefficients'+arrow)
+plt.title('Semilog plot of coefficients of cos(cos(x))')
+plt.grid(True)
+
+plt.figure(6)
+plt.loglog(num_vec,np.abs(coeff_vec_coscos_integ),'ro')
+plt.loglog(num_vec,np.abs(coeff_vec_coscos_lst),'go',markersize=4)
+plt.legend(["Integration","Least squares"])
+plt.xlabel('n'+arrow)
+plt.ylabel('Absolute value of coefficients'+arrow)
+plt.title('Loglog plot of coefficients of cos(cos(x))')
+plt.grid(True)
+
+plt.figure(7)
+plt.semilogy(vec,expon(vec_period),'r')
+plt.semilogy(vec,fourier_func(num,vec,expon),'go')
+plt.legend(["Expected fourier","Fourier with integration coefficients"])
+plt.xlabel('x'+arrow)
+plt.ylabel('$e^x$'+arrow)
+plt.title('Expected fourier plot and fourier plot using integration coefficients ($e^x$)',fontsize=10)
+plt.grid(True)
+
+plt.figure(8)
+plt.semilogy(vec,expon(vec_period),'r')
+plt.semilogy(vec,np.dot(matrix_gen(num,vec),coeff_vec_exp_lst),'go')
+plt.legend(["Expected fourier","Fourier with least square coefficients"])
+plt.xlabel('x'+arrow)
+plt.ylabel('$e^x$'+arrow)
+plt.title('Expected fourier plot and fourier plot using least square coefficients ($e^x$)',fontsize=10)
+plt.grid(True)
+
+plt.figure(9)
+plt.plot(vec,coscos(vec_period),'r')
+plt.plot(vec,fourier_func(num,vec,coscos),'go')
+plt.legend(["Expected fourier","Fourier with integration coefficients"],loc='upper right')
+plt.xlabel('x'+arrow)
+plt.ylabel('cos(cos(x))'+arrow)
+plt.title('Expected fourier plot and fourier plot using integration coefficients (cos(cos(x)))',fontsize=10)
+plt.grid(True)
+
+plt.figure(10)
+plt.plot(vec,coscos(vec_period),'r')
+plt.plot(vec,np.dot(matrix_gen(num,vec),coeff_vec_coscos_lst),'go')
+plt.legend(["Expected fourier","Fourier with least square coefficients"],loc='upper right')
+plt.xlabel('x'+arrow)
+plt.ylabel('cos(cos(x))'+arrow)
+plt.title('Expected fourier plot and fourier plot using least squares coefficients (cos(cos(x)))',fontsize=10)
+plt.grid(True)
+
+plt.show() #To show the generated plots
+#End of the code 
