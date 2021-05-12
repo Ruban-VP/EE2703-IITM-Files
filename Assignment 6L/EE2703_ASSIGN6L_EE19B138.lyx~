@@ -1,0 +1,804 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 6L
+\begin_inset Newline linebreak
+\end_inset
+
+The Laplace Transform
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+April 18, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Enumerate
+Learn about the scipy.signal library and polynomial functions of the numpy
+ library.
+\end_layout
+
+\begin_layout Enumerate
+Use those tools to solve various LCCDEs using laplace transform techniques.
+\end_layout
+
+\begin_layout Section
+Theory: Laplace transform:
+\end_layout
+
+\begin_layout Standard
+Laplace transform is a powerful technique used in engineering to solve complex
+ mathematical differential equations.
+ This technique helps us to solve various real-life problems such as:
+\end_layout
+
+\begin_layout Enumerate
+Steady state response of an electrical circuit.
+\end_layout
+
+\begin_layout Enumerate
+Steady state response of a mechanical spring-block system.
+\end_layout
+
+\begin_layout Enumerate
+Analysing the behaviour of electrical/mechanical filters.
+\end_layout
+
+\begin_layout Standard
+The formula for the unilateral laplace transform of a continuous time function
+ x(t) is given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(s)=\int_{0}^{∞}x(t)e^{st}dt
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $s$
+\end_inset
+
+ is the complex frequency.
+ One major use of laplace function is that if 
+\begin_inset Formula $x(t)$
+\end_inset
+
+ gives 
+\begin_inset Formula $X(s),$
+\end_inset
+
+then 
+\begin_inset Formula $\frac{dx(t)}{dt}$
+\end_inset
+
+ will give 
+\begin_inset Formula $sX(s)$
+\end_inset
+
+ (provided the initial conditions are zero).
+ Also, the transform is a linear transform.
+ These two powerful properties will help us to solve differential equations
+ easily since in the laplace domain, they will be algebraic equations, thanks
+ to these two properties.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Assignment objectives:
+\end_layout
+
+\begin_layout Subsection
+Response of a spring-mass system:
+\end_layout
+
+\begin_layout Standard
+The differential equation of a spring-mass system is given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\ddot{x}+w_{0}^{2}x=f(t)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with 
+\begin_inset Formula $f(t)=cos(w_{d}t)e^{-at}u(t)$
+\end_inset
+
+, where:
+\end_layout
+
+\begin_layout Itemize
+a = Decay constant (Given as 0.5)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $w_{d}$
+\end_inset
+
+ = Driving frequency in rad/s (Given as 1.5)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ = Natural frequency of the spring-mass system in rad/s (Given as 1.5)
+\end_layout
+
+\begin_layout Standard
+The objective is to solve for the time response of x provided 
+\begin_inset Formula $x(0)=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\dot{x}(t)=0$
+\end_inset
+
+.
+ The plot for the response is given below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_1.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The decay in the response dies out after sometime and the response becomes
+ purely sinusoidal
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_2.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The decay dies in this graph as well but takes more time to vanish since
+ the decay constant is low compared to the previous plot
+\end_layout
+
+\begin_layout Subsection
+Response of the spring-mass system for different frequencies:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_3.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename pics/Figure_4.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename pics/Figure_5.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename pics/Figure_6.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename pics/Figure_7.png
+	scale 75
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, the response is having maximum amplitude for w = 1.5 rad/s.
+ It is obvious since the resonant frequency of the spring-mass system is
+ 
+\begin_inset Formula $\sqrt{2.25}=1.5$
+\end_inset
+
+ rad/s and that is equal to the driving frequency as well.
+ Hence, the response is maximum at w = 1.5 rad/s and starts to attenuate
+ for frequencies around it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Coupled spring problem:
+\end_layout
+
+\begin_layout Standard
+The coupled differential equations corresponding to the responses of two
+ springs are given as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\ddot{xx}+x-y=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\ddot{y}+2(y-x)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+with 
+\begin_inset Formula $x(0)=1,\dot{x}(0)=y(0)=\dot{y}(0)=0.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Solving for X(s) and Y(s), we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(s)=\frac{s^{2}+2}{s^{3}+3s}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+Y(s)=\frac{2}{s^{3}+3s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+These laplace transform expressions are again converted back to time domain
+ and the time responses are obtained in the plot given below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_8.png
+	scale 55
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Both the springs have sinusoidal responses with the response of 
+\begin_inset Formula $y$
+\end_inset
+
+ being more in amplitude than that of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ The reason is simple: y(t) = 2(u(t)-x(t))
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+RLC filter:
+\end_layout
+
+\begin_layout Standard
+This is an electrical engineering example.
+ The objective is to analyse the frequency domain gain and phase of the
+ transfer function of the system shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/rlc.png
+	scale 25
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The transfer function of this system is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+H(s)=\frac{1}{s^{2}LC+sRC+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+where R = 100
+\begin_inset Formula $\Omega$
+\end_inset
+
+, L = 1
+\begin_inset Formula $\mu$
+\end_inset
+
+H and C = 1
+\begin_inset Formula $\mu$
+\end_inset
+
+F.
+ The magnitude and phase response plots are shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_9.png
+	scale 43
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now an input voltage is applied to this system.
+ The input voltage expression is given as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+v_{i}(t)=cos(10^{3}t)-cos(10^{6}t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Converting this to the laplace form, multiplying it with the transfer function
+ and then inverting the result back to time domain, we have the following
+ graphs:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_10.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The response is steadily increasing with slight sinusoidal variations
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_11.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The response looks almost sinusoidal with frequency of 1000 rad/s
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_11(1).png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+On zooming, we can see that there are small sinusoidal variations on top
+ of the sinusoidal graph obtained in the previous figure.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusions:
+\end_layout
+
+\begin_layout Enumerate
+The time responses of the spring-mass system in Q1 and Q2 reach steady state
+ and have a sinusoidal variation.
+ The exponential components decay after some time and the time taken to
+ reach steady state is less in case of 
+\begin_inset Formula $a=0.5$
+\end_inset
+
+ as expected.
+\end_layout
+
+\begin_layout Enumerate
+In Q3, the response has maximum amplitude at 
+\begin_inset Formula $w=1.5$
+\end_inset
+
+ rad/s since that is equal to the resonant frequency of the spring-mass
+ system.
+ Frequencies other than 1.5 rad/s have lower amplitudes.
+\end_layout
+
+\begin_layout Enumerate
+In Q4, the response of spring Y is having more amplitude than that of spring
+ X since y(t) = 2(u(t)-x(t)).
+ Both the responses are sinusoidal with 
+\begin_inset Formula $w=\sqrt{3}=1.717$
+\end_inset
+
+ rad/s.
+\end_layout
+
+\begin_layout Enumerate
+In Q5, from the magnitude and phase responses, it is evident that the filter
+ is a second order low-pass filter with its pole frequencies as 
+\begin_inset Formula $p1=10^{4}$
+\end_inset
+
+ rad/s and 
+\begin_inset Formula $p2=10^{8}$
+\end_inset
+
+ rad/s.
+ Hence, it is a real pole system and hence, the magnitude response is a
+ strictly decreasing function.
+\end_layout
+
+\begin_layout Enumerate
+In Q6, the output voltage clearly is dominated by the component of 
+\begin_inset Formula $w=10^{3}$
+\end_inset
+
+ rad/s and this is obvious since 
+\begin_inset Formula $10^{3}$
+\end_inset
+
+ is less than the first pole frequency, 
+\begin_inset Formula $10^{4}.$
+\end_inset
+
+ However, the component of 
+\begin_inset Formula $w=10^{6}$
+\end_inset
+
+ rad/s is very low and it just acts like a noise to the output.
+ 
+\end_layout
+
+\end_body
+\end_document

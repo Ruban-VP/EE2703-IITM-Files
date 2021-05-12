@@ -1,0 +1,1315 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 9
+\begin_inset Newline linebreak
+\end_inset
+
+Spectra of non-periodic signals
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+May 11, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Enumerate
+Learn how DFT is used to analyse spectra of non-periodic DT signals.
+\end_layout
+
+\begin_layout Enumerate
+Analyse spectra of sinusoidal DT signals using and without using hamming
+ window.
+\end_layout
+
+\begin_layout Enumerate
+Estimate the frequency and initial phase of a single sinusoid by finding
+ its DFT and analysing it.
+\end_layout
+
+\begin_layout Enumerate
+FInd the DFT of a chirped signal and also plot DFTs of different segments
+ of it to see how the frequency components change with time.
+\end_layout
+
+\begin_layout Section
+Theory:
+\end_layout
+
+\begin_layout Subsection
+DFT of signals with discontinuities:
+\end_layout
+
+\begin_layout Standard
+The DFT and inverse DFT equations are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a[k]=\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x[n]=\sum_{k=0}^{N-1}\frac{a[k]}{N}e^{j\frac{2\pi}{N}kn}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+As we can see, both the equations are inherently periodic with period as
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ samples.
+ Hence, both the functions 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ and 
+\begin_inset Formula $a[k]$
+\end_inset
+
+ are periodic.
+ Now, let's say the samples which are at the ends in one period of signal
+ 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ have a big difference.
+ Now, there is a discontinuity in the signal.
+ Because of this discontinuity, the spectrum of the signal will contain
+ fourier coefficients which will decay as 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+.
+ So even if the samples are part of a sinusoid, the 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ decay will be present if the samples at the end are not so close.
+ 
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+An example for this 
+\begin_inset Formula $x[n]=sin(\sqrt{2}t)$
+\end_inset
+
+ with the period as 
+\begin_inset Formula $2\pi$
+\end_inset
+
+.
+ Even though the signal is periodic, the time range we took is not a period
+ of it.
+ So, the periodic extension for period 
+\begin_inset Formula $T=2\pi$
+\end_inset
+
+ will not produce 
+\begin_inset Formula $sin(\sqrt{2}t)$
+\end_inset
+
+ but a different signal.
+ Hence, the DFT will also not have two impulses but a continuously decreasing
+ spectrum.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_2.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is the original signal 
+\begin_inset Formula $sin(\sqrt{2}t)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_3.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Signal whose first period (T=
+\begin_inset Formula $2\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=64$
+\end_inset
+
+) contains samples of 
+\begin_inset Formula $sin(\sqrt{2}t)$
+\end_inset
+
+ and the remaining samples are periodic repetitions of the first-period
+ samples
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The DFT of this signal will be:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_1.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+DFT of 
+\begin_inset Formula $sin(\sqrt{2}t)$
+\end_inset
+
+ for 
+\begin_inset Formula $T=2\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=64$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+As we can see, we have peaks around 
+\begin_inset Formula $\sqrt{2}$
+\end_inset
+
+ but they are not impulses.
+ Rather, we have a continuous spectrum which seems to have a 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ decay.
+ But, first of all where does this decay come from? 
+\end_layout
+
+\begin_layout Subsection
+Gibbs phenomenon:
+\end_layout
+
+\begin_layout Standard
+Gibbs phenomenon occurs when a signal contains discontinuites.
+ We know sinusoids are continuous signals.
+ Hence, when we try to model a discontinuous function as sum (or) integral
+ of sinusoids (Definition of fourier transform), logically we will need
+ more frequency components to achieve that discontinuity.
+ Hence, the spectrum will decay slowly and won't even become zero after
+ some frequency, i.e., spectrum won't be bandlimited.
+ Let us take the example of a periodic linear ramp with period 
+\begin_inset Formula $2\pi$
+\end_inset
+
+.
+ It's equation is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x(t)=t∀t\in[-\pi,\pi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+and this segment is periodically repeated to get the periodic linear ramp.
+ Clearly, we have discontinuities at 
+\begin_inset Formula $t=n\pi$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is an integer.
+ Now, the fourier series representation of this signal would be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x(t)=\frac{sin(t)}{1}-\frac{sin(2t)}{2}+\frac{sin(3t)}{3}...
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The spectrum of this signal on a 
+\begin_inset Formula $dB-dec$
+\end_inset
+
+ plot is as follows:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_4.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The spectrum decays linearly with respect to 
+\begin_inset Formula $\omega$
+\end_inset
+
+ on the 
+\begin_inset Formula $dB-dec$
+\end_inset
+
+ plot indicating 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ delay as expected
+\end_layout
+
+\begin_layout Subsection
+Hamming window:
+\end_layout
+
+\begin_layout Standard
+To avoid discontinuities, we use a hamming window.
+ This hamming window is another DT signal which will be multiplied with
+ the original signal.
+ This window signal will be high inside the period and nearly zero at the
+ edges.
+ Hence, the edge discontinuities are dampened whereas the signal within
+ the bulk of the period is preserved.
+ An example for a hamming window is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+w[n]=0.54+0.46cos(\frac{2\pi n}{N-1})∀0\leq n<N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+and this signal is also periodically repeated.
+ The new refined signal after the multiplication with the window signal
+ is plotted below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_5.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The period is still maintained as 
+\begin_inset Formula $2\pi$
+\end_inset
+
+ and the frequency as 
+\begin_inset Formula $\sqrt{2}.$
+\end_inset
+
+ But now the discontinuities are reduced because of the multiplication with
+ the window signal
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, let us plot the DFT of this refined signal.
+ The DFT of this new signal will be circular convolution of the DFTs of
+ the original signal and the window singal (Multiplication in time domain
+ leads to convolution in the frequency domain and vice-vera):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+G_{k}=\sum_{n=0}^{N}F_{n}W_{k-n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, we expect the 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ decay to have vanished since the DFT of 
+\begin_inset Formula $w[n]$
+\end_inset
+
+ only contains components at DC and 
+\begin_inset Formula $\omega=\pm1$
+\end_inset
+
+.
+ Hence, we can write:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+G_{k}=F_{k}W_{o}+F_{k+1}W_{-1}+F_{k-1}W_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, this summation does not exist for all values of 
+\begin_inset Formula $k$
+\end_inset
+
+ but only at those values of 
+\begin_inset Formula $k$
+\end_inset
+
+ where the DFT of 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ is high.
+ So, the DFT of the refined signal will be:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_6.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The DFT is not accurate but much better when compared to the DFT of the
+ unrefined signal
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+We got rid of the 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ decay but still the peaks are broad.
+ We really cannot do anything about it because it's due to the hamming window.
+ The convolution sum doesn't decay instantly.
+ It exists for 
+\begin_inset Formula $k$
+\end_inset
+
+ values which are around 
+\begin_inset Formula $\sqrt{2}$
+\end_inset
+
+ and then only becomes zero.
+ That's why we have a broad peak even after windowing is done.
+ 
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+One improvement which we can do to get an relatively accurate spectrum is
+ to increase the resolution, i.e, increase the time range (or period) T for
+ which it is calculated.
+ Let's assume now the signal runs from 
+\begin_inset Formula $[-4\pi,4\pi$
+\end_inset
+
+) with 
+\begin_inset Formula $N=257.$
+\end_inset
+
+ The signal will look like this:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_7.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here the period is 
+\begin_inset Formula $8\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=257.$
+\end_inset
+
+ Again, we periodically repeat the first period to get the whole periodic
+ signal
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+DFT of this signal is shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_8.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The DFT is still broad but definitely better than the previous DFT plot
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Assignment:
+\end_layout
+
+\begin_layout Subsection
+Spectrum of 
+\begin_inset Formula $cos^{3}(0.86t):$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know:
+\begin_inset Formula 
+\[
+cos^{3}(w_{0}t)=0.75cos(w_{0}t)+0.25cos(3w_{0}t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cos^{3}(w_{0}t)=0.375e^{jw_{0}t}+0.375e^{-jw_{0}t}+0.125e^{j3w_{0}t}+0.125e^{-j3w_{0}t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, we would expect 4 sharp peaks at the given frequencies.
+ However, in this problem, our time range is a multiple of 
+\begin_inset Formula $2\pi$
+\end_inset
+
+ which is clearly not a period since 
+\begin_inset Formula $w_{o}=0.86.$
+\end_inset
+
+ Hence, the periodic repetition won't be 
+\begin_inset Formula $cos^{3}(0.86t)$
+\end_inset
+
+ and we will be facing the same problems we had with 
+\begin_inset Formula $sin(\sqrt{2}t).$
+\end_inset
+
+ So, our DFT plot will be continuous with broad peaks at the given frequencies.
+ The DFT plot for period time range 
+\begin_inset Formula $[-4\pi,4\pi)$
+\end_inset
+
+ and 
+\begin_inset Formula $N=512$
+\end_inset
+
+ is given below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_9.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is the DFT plot without the hamming window
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_10.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The DFT plot is better when the hamming window is introduced.
+ However, the peaks are still broad because of the reasons discussed in
+ section 2.3
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Estimation of frequency and initial phase of a sinusoid using DFT:
+\end_layout
+
+\begin_layout Standard
+DFT plotting could also be used to find the frequency and initial phase
+ of a sinusoidal signal.
+ If we know that the samples available to us belong to a sinusoid function,
+ then we can use its DFT to find the frequency and phase.
+ In this problem, it is given that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x(t)=cos(w_{0}t+\delta)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+where 
+\begin_inset Formula $0.5<w_{0}<1.5$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is arbitrary.
+ So, let's assume we have the samples ranging from 
+\begin_inset Formula $[-8\pi,8\pi)$
+\end_inset
+
+ with 
+\begin_inset Formula $N=1024.$
+\end_inset
+
+ The DFT plot looks as follows:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_11.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is the DFT for 
+\begin_inset Formula $w_{0}=1.2$
+\end_inset
+
+ rad/s and 
+\begin_inset Formula $\delta=0.78$
+\end_inset
+
+ rad.
+ The peaks are broad as expected
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now let's assume some white noise (Of 
+\begin_inset Formula $Amplitude=0.1)$
+\end_inset
+
+ is present in the signal.
+ This white noise is a gaussian distribution and hence, the magnitude doesn't
+ get affected so much.
+ There can be some significant changes in the phase spectrum but again,
+ the phase values at frequencies 
+\begin_inset Formula $\pm w_{0}$
+\end_inset
+
+ won't get affected very much.
+ 
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The DFT plot of the noisy signal is:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_12.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The magnitude plot is a bit noisy but the peaks are still intact.
+ Phase plot also got affected a bit but the overall structure of the plot
+ is preserved
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The reason for this behavior is because, the DFT of gaussian is another
+ gaussian.
+ Also, we assumed an amplitude of 0.1.
+ So, that's the maximum value the DFT of gaussian can have.
+ Hence, both the magnitude and phase of the original plots don't get affected
+ to a noticeable extent.
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, in order to estimate 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta,$
+\end_inset
+
+we need to find the value of 
+\begin_inset Formula $w$
+\end_inset
+
+ where the magnitude of DFT is maximum and find the phase there to find
+ 
+\begin_inset Formula $\delta$
+\end_inset
+
+.
+ The proof for this conclusion is given below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a[k](DFT)=\sum_{n=0}^{N-1}cos(w_{0}\frac{2T_{0}}{N}n+\delta)exp(-j\frac{2\pi}{N}kn)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+a[k]=\sum_{n=0}^{N-1}0.5[exp(w_{0}\frac{2T_{0}}{N}n+\delta)exp(-j\frac{2\pi}{N}kn)+exp(-w_{0}\frac{2T_{0}}{N}n-\delta)exp(-j\frac{2\pi}{N}kn)]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+(
+\series default
+Note: 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ 
+\series medium
+changed to 
+\begin_inset Formula $w_{0}\frac{2T_{0}}{N}$
+\end_inset
+
+ in DT domain since CT domain frequencies will be scaled by 
+\begin_inset Formula $T_{s}=\frac{2T_{0}}{N}$
+\end_inset
+
+ in DT domain.)
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Let's assume we have a 
+\begin_inset Formula $k_{0}$
+\end_inset
+
+ such that 
+\begin_inset Formula $w_{0}\frac{2T_{0}}{N}≈\frac{2\pi}{N}k_{0}$
+\end_inset
+
+.
+ Now, the DFT summation becomes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a[k]=\sum_{n=0}^{N-1}0.5[exp(\delta)+exp(-2w_{0}\frac{2T_{0}}{N}n-\delta)]=0.5Nexp(\delta)+\sum_{n=0}^{N-1}0.5exp(-2w_{0}\frac{2T_{0}}{N}n-\delta)≈0.5N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+We are able to discard the final summation because 
+\begin_inset Formula $2w_{0}\frac{2T_{0}}{N}n≈\frac{4\pi}{N}k_{0}$
+\end_inset
+
+ is N-periodic.
+ Hence, whatever phase we find at estimated 
+\begin_inset Formula $w_{0},$
+\end_inset
+
+that would be almost equal to the actual phase.
+ The results that were obtained by following this logic were:
+\end_layout
+
+\begin_layout Paragraph
+Without white noise:
+\end_layout
+
+\begin_layout Enumerate
+
+\series medium
+The estimated frequency w0 = 1.2
+\end_layout
+
+\begin_layout Enumerate
+
+\series medium
+The estimated phase δ (in Rad) = 0.805
+\end_layout
+
+\begin_layout Paragraph
+With white noise:
+\end_layout
+
+\begin_layout Enumerate
+
+\series medium
+The estimated frequency w0 = 1.2
+\end_layout
+
+\begin_layout Enumerate
+
+\series medium
+The estimated phase δ (in Rad) = 0.807
+\end_layout
+
+\begin_layout Subsection
+DFT of chirped signal:
+\end_layout
+
+\begin_layout Standard
+A chirped signal is a signal whose frequency depends on the time instant.
+ These type of signals will have different frequency components at different
+ time instants.
+ The example given in the assignment is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x(t)=cos(16(1.5+\frac{t}{2\pi})t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+with 
+\begin_inset Formula $t$
+\end_inset
+
+ ranging from 
+\begin_inset Formula $[-\pi,\pi).$
+\end_inset
+
+ Also, it is asked to assume 
+\begin_inset Formula $N=1024.$
+\end_inset
+
+ The DFT of the periodic repetition of this signal is:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_13.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As expected, the signal contains frequency components from 16 rad/s to 32
+ rad/s and the spectrum decays quickly after that range
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now in order to analyse how the frequency components depend on the time
+ range, let us divide the signal into groups of 64 samples.
+ So, we would have 16 such groups.
+ By finding the DFT for each group and plotting the DFT magnitude as a 3d
+ plot with x-axis as time 
+\begin_inset Formula $'t'$
+\end_inset
+
+ and y-axis as frequency 
+\begin_inset Formula $'w'$
+\end_inset
+
+, we will have the following plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_14.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The DFT structure is still the same.
+ However, the peaks are present at different locations depending on the
+ time
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_14(1).png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When viewed from above, we can clearly see the peaks widen up indicating
+ the frequencies present in the signal increase with time.
+ Also, a linear widening of the peaks mean that the frequencies depend linearly
+ on the time value which is also true
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusions:
+\end_layout
+
+\begin_layout Enumerate
+When plotting DFT for signals with discontinuities, the spectrum is not
+ merely a collection of distinct spikes but a continuous decreasing spectrum
+ with 
+\begin_inset Formula $\frac{1}{\omega}$
+\end_inset
+
+ decay.
+\end_layout
+
+\begin_layout Enumerate
+To dampen the discontinuities, a hamming window is used.
+ This signal is multiplied with the original signal so that the high frequency
+ components get attenuated and hence, the discontinuities are dampened.
+\end_layout
+
+\begin_layout Enumerate
+Signal 
+\begin_inset Formula $cos^{3}(0.86t)$
+\end_inset
+
+ has a DFT which has broad peaks and continuous decay.
+ However, when a hamming window is used, the continuous decay vanishes but
+ still the peaks are broad.
+\end_layout
+
+\begin_layout Enumerate
+To estimate the frequency and initial phase of a sinusoidal signal, its
+ DFT is used.
+ The results were fairly accurate when the period of the signal is high.
+ White noise didn't affect the results much since its amplitude is very
+ low.
+\end_layout
+
+\begin_layout Enumerate
+The chirped signal has frequency components between 16 rad/s and 32 rad/s.
+ Also, when the individual DFTs of the 64-samples signals were plotted as
+ a function of 
+\begin_inset Formula $w$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+, the locations of the peaks widened linearly as 
+\begin_inset Formula $t$
+\end_inset
+
+ increased indicating linear dependence of frequency on 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

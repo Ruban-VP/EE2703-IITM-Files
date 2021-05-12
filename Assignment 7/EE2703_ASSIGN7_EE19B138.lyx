@@ -1,0 +1,1206 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 7
+\begin_inset Newline linebreak
+\end_inset
+
+Circuit analysis using Sympy
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+April 25, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Enumerate
+Get started with some basic Sympy (Symbolic python) functions.
+\end_layout
+
+\begin_layout Enumerate
+Solve for the output response of given active RC filters using Sympy and
+ Scipy.signal toolbox.
+\end_layout
+
+\begin_layout Enumerate
+Analyse the frequency components in the output responses.
+\end_layout
+
+\begin_layout Section
+Theory: Active RC filters:
+\end_layout
+
+\begin_layout Standard
+Active RC filters are electronic devices which are purely made using active
+ operational amplifiers (OpAmps), resistors and capacitors.
+ These filters help us to filter out certain frequency components present
+ in an electric signal which may not be desirable for a particular application.
+ They are used in various applications such as noise reduction, radio tuning,
+ selective amplification, etc.
+ In this assignment, two types of active RC filters are analysed: Low pass
+ filter and high pass filter.
+\end_layout
+
+\begin_layout Subsection
+Low pass filter:
+\end_layout
+
+\begin_layout Standard
+A low pass filter (LPF) is an electrical filter which allows only the low
+ frequency components of an electric signal and attenuates the high frequency
+ components.
+ The electronic circuit used to realise this filter is shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Screenshot from 2021-04-25 20-57-01.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+We need to solve for the transfer function 
+\begin_inset Formula $H(s)=\frac{V_{o}(s)}{V_{i}(s)}$
+\end_inset
+
+.
+ To do this, we need to solve for the node voltages using nodal analysis.
+ Also, we know that in the laplace domain, a capacitor acts like a resistor
+ with its resistance 
+\begin_inset Formula $R=\frac{1}{sC}$
+\end_inset
+
+.
+ With these things in mind, the nodal analysis equation in matrix form will
+ be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{cccc}
+0 & 0 & 1 & \frac{-1}{G}\\
+-\frac{1}{1+sR_{2}C_{2}} & 1 & 0 & 0\\
+0 & -G & G & 1\\
+-\frac{1}{R_{1}}-\frac{1}{R_{2}}-sC_{1} & \frac{1}{R_{2}} & 0 & sC_{1}
+\end{array}\right]\left[\begin{array}{c}
+V_{1}\\
+V_{p}\\
+V_{m}\\
+V_{o}
+\end{array}\right]=\left[\begin{array}{c}
+0\\
+0\\
+0\\
+-\frac{V_{i}(s)}{R_{1}}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, the source vector on the RHS contains only one non-zero term dependent
+ on 
+\begin_inset Formula $V_{i}$
+\end_inset
+
+.
+ Hence, all the other node voltages would be some multiple of it.
+ We need the multiple relating 
+\begin_inset Formula $V_{o}$
+\end_inset
+
+ and that multiple is 
+\begin_inset Formula $H(s)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+High pass filter:
+\end_layout
+
+\begin_layout Standard
+A high pass filter (HPF) is an electrical filter which allows only the high
+ frequency components of an electric signal and attenuates the low frequency
+ components.
+ The electronic circuit used to realise this filter is shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Screenshot from 2021-04-25 20-57-07.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The circuit is almost similar to the LPF circuit except that the resistors
+ are replaced by capacitors and vice-versa (Except for the feedback resistors).
+ Also, there isn't much change in the structure of the nodal matrix equation.
+ With the understanding that whatever was initially a resistor is now replaced
+ by a capacitor and vice-versa, we can apply the following transform:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R\rightarrow\frac{1}{sC}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+C\rightarrow\frac{1}{sR}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+\noindent
+
+\series medium
+With these changes in mind, the new matrix equation becomes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\begin{array}{cccc}
+0 & 0 & 1 & \frac{-1}{G}\\
+-\frac{sC_{2}R_{3}}{1+sC_{2}R_{3}} & 1 & 0 & 0\\
+0 & -G & G & 1\\
+-sC_{1}-sC_{2}-\frac{1}{R_{1}} & sC_{2} & 0 & \frac{1}{R_{1}}
+\end{array}\right]\left[\begin{array}{c}
+V_{1}\\
+V_{p}\\
+V_{m}\\
+V_{o}
+\end{array}\right]=\left[\begin{array}{c}
+0\\
+0\\
+0\\
+-sC_{1}V_{i}(s)
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Again the output response 
+\begin_inset Formula $V_{o}$
+\end_inset
+
+ will be some multiple of 
+\begin_inset Formula $V_{i}$
+\end_inset
+
+ and that multiple is the transfer function 
+\begin_inset Formula $H(s).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Solving for the transfer function:
+\end_layout
+
+\begin_layout Standard
+
+\series medium
+As we have seen, the matrix equation is not purely based on numbers.
+ It is also based on mathematical variables.
+ In our case, the variable is 's'.
+ Unlike normal matrix equations, we can't solve this using packages such
+ as numpy.
+ We need to treat the variable 's' as an unknown entity and solve for the
+ transfer function as a function of 's'.
+ To do this, we need the Sympy library of python.
+ Sympy is a special library which allows us to treat certain variables as
+ mathematical/symbolic variables.
+ These variables are different from the usual python variables.
+ They necessarily need not store values but rather store symbols.
+ These symbols don't have any value but can be treated like the variables
+ we use in math (x,y,z) and complex expressions could be formed using these
+ symbols.
+ Finally the value of that expression can be found by providing these symbols
+ some numerical values.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series medium
+Sympy is very useful when it comes to obtain the expression from primitive
+ inputs.
+ In our filter case too, the primitive inputs are the resistor and capacitor
+ values.
+ However, the final expression is not easily derivable and hence, we can't
+ write a user-defined python function without knowing the final expression.
+ Sympy allows us to find the final expression while still treating the variable
+ 's' as a mathematical variable.
+\end_layout
+
+\begin_layout Paragraph
+Note: 
+\series medium
+In this report, the values of the resistors, capacitors and Opamp are: R1
+ = R2 = R3 =10 K ohms, C1= C2 =1 nF, Opamp gain G = 1.586.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+import sympy as sp
+\end_layout
+
+\begin_layout Plain Layout
+
+s = sp.symbols('s')
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+def LPF(R1,R2,C1,C2,G,Vi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    A = sp.Matrix([[0,0,1,-1/G],[-1/(1+(s*R2*C2)),1,0,0],
+\end_layout
+
+\begin_layout Plain Layout
+
+       [0,-G,G,1],[-(1/R1)-(1/R2)-(s*C1),1/R2,0,s*C1]])
+\end_layout
+
+\begin_layout Plain Layout
+
+    #In the original code, indendation is proper.
+ Here, the line is brought 
+\end_layout
+
+\begin_layout Plain Layout
+
+    #down due to space constraints
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    b = sp.Matrix([0,0,0,-Vi/R1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    V = A.inv()*b; TF = V[3]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return TF
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+For example, in the python function provided above, the inputs are the resistor,
+ capacitor and Opamp gain values.
+ However, the final expression is not directly used to find the transfer
+ function.
+ Instead, the sympy variable 's' is used to denote the variable and the
+ matrix equation is solved.
+ Finally, the expression is obtained and returned out.
+\end_layout
+
+\begin_layout Section
+Functions defined in the code:
+\end_layout
+
+\begin_layout Subsection
+Function to generate the LPF transfer function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def LPF(R1,R2,C1,C2,G,Vi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    A = sp.Matrix([[0,0,1,-1/G],[-1/(1+(s*R2*C2)),1,0,0],[0,-G,G,1],[-(1/R1)-(1/R
+2)-(s*C1),1/R2,0,s*C1]])
+\end_layout
+
+\begin_layout Plain Layout
+
+    b = sp.Matrix([0,0,0,-Vi/R1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    V = A.inv()*b; TF = V[3]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return TF
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function returns the transfer function of an LPF.
+\end_layout
+
+\begin_layout Subsection
+Function to generate the HPF transfer function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def HPF(R1,R3,C1,C2,G,Vi):
+\end_layout
+
+\begin_layout Plain Layout
+
+    A = sp.Matrix([[0,0,1,-1/G],[-s*C2*R3/(1+(s*C2*R3)),1,0,0],[0,-G,G,1],[-(s*C1
+)-(s*C2)-(1/R1),s*C2,0,1/R1]])
+\end_layout
+
+\begin_layout Plain Layout
+
+    b = sp.Matrix([0,0,0,-Vi*s*C1])
+\end_layout
+
+\begin_layout Plain Layout
+
+    V = A.inv()*b; TF = V[3]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return TF
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function returns the transfer function of a HPF.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Function to convert transfer function expression to signal toolbox LTI form:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def SymtoTrans(TF):
+\end_layout
+
+\begin_layout Plain Layout
+
+    n,d = TF.as_numer_denom()
+\end_layout
+
+\begin_layout Plain Layout
+
+    num = n.as_poly(s).all_coeffs()
+\end_layout
+
+\begin_layout Plain Layout
+
+    den = d.as_poly(s).all_coeffs()
+\end_layout
+
+\begin_layout Plain Layout
+
+    num = [float(i) for i in num]
+\end_layout
+
+\begin_layout Plain Layout
+
+    den = [float(i) for i in den]
+\end_layout
+
+\begin_layout Plain Layout
+
+    H = sig.lti(num,den)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return H
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function takes a transfer function expression as input, converts it
+ to the signal toolbox LTI form and returns it.
+\end_layout
+
+\begin_layout Subsection
+Function to generate the magnitude response of a transfer function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def magresponse(TF,w):
+\end_layout
+
+\begin_layout Plain Layout
+
+    ss = 1j*w
+\end_layout
+
+\begin_layout Plain Layout
+
+    tf = sp.lambdify(s,TF,"numpy")
+\end_layout
+
+\begin_layout Plain Layout
+
+    return abs(tf(ss))
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function takes a transfer function and the frequencies vector as an
+ input and returns the magnitude response of the transfer function for the
+ provided frequencies.
+\end_layout
+
+\begin_layout Subsection
+Function to generate the response of sum of sinusoids:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def sumofsins_response(w1,w2,t,H):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x = np.sin(w1*t)+np.cos(w2*t)
+\end_layout
+
+\begin_layout Plain Layout
+
+    vo = sig.lsim(H,x,t)[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return vo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function takes the sinusoid frequencies, time vector and signal toolbox
+ LTI form of a transfer function, generates the output response of a sum
+ of sinusoids input and returns it.
+\end_layout
+
+\begin_layout Subsection
+Function to generate the response of damped sinusoid:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+def dampedsin_response(wd,a,t,H):
+\end_layout
+
+\begin_layout Plain Layout
+
+    x = np.cos(wd*t)*np.exp(-a*t)
+\end_layout
+
+\begin_layout Plain Layout
+
+    vo = sig.lsim(H,x,t)[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+    return vo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This function takes the sinusoid frequency, decay constant, time vector
+ and signal toolbox LTI form of a transfer function, generates the output
+ response of a damped sinusoid input and returns it.
+\end_layout
+
+\begin_layout Section
+Observations and plots:
+\end_layout
+
+\begin_layout Subsection
+Magnitude response plots:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_1.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The LPF we have seems to be a single pole LPF with pole frequency=
+\begin_inset Formula $10^{5}$
+\end_inset
+
+rad/s
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_2.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The HPF we have seems to be a DC zero-Single pole HPF with pole frequency=
+\begin_inset Formula $10^{5}$
+\end_inset
+
+rad/s
+\end_layout
+
+\begin_layout Subsection
+Step response plots:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_3.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The DC gain of the LPF seems to be 0.8.
+ Hence, the step response is looking like a DC signal with value 0.8
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_4.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As expected, the step response of the HPF is a DC signal but with value
+ very close to zero
+\end_layout
+
+\begin_layout Subsection
+Sum of sinusoids signal:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_5.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is a signal which is made up of two sinusoids of frequencies, 
+\begin_inset Formula $f_{1}=1kHz$
+\end_inset
+
+,
+\begin_inset Formula $f_{2}=1MHz$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Response of sum of sinusoids:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_6.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The output response of the sum of sinusoids, when passed through an LPF
+ purely contains only the f=1kHz component
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_7.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The output response of the sum of sinusoids, when passed through a HPF purely
+ contains only the f=1MHz component
+\end_layout
+
+\begin_layout Subsection
+Damped sinusoid signals:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_8.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is a damped sinusoid signal with f=1kHz and decay constant=
+\begin_inset Formula $200s^{-1}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_9.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is a damped sinusoid with f=1MHz and decay constant=
+\begin_inset Formula $200s^{-1}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_9(1).png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+On zooming in, we can see the sinusoidal variation of the high frequency
+ sinusoid.
+ There isn't much variation in the dampening component in this time scale
+\end_layout
+
+\begin_layout Subsection
+Response of damped sinusoid:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_10.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When the low frequency damped sinusoid is passed through an LPF, the output
+ isn't much different from the input.
+ The amplitude has reduced to 0.8
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_11.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When the low frequency damped sinusoid is passed through a HPF, the output
+ is highly attenuated as seen from the image.
+ The line at t=0 is due to initial conditions
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_12.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When the high frequency damped sinusoid is passed through an LPF, the output
+ is highly attenuated as seen from the image (y-axis scale is very low denoting
+ the attenuation)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename pics/Figure_13.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When high frequency damped sinusoid is passed through a HPF, the output
+ isn't much different from the input.
+ The amplitude has reduced to 0.8
+\end_layout
+
+\begin_layout Section
+Conclusions:
+\end_layout
+
+\begin_layout Enumerate
+Both the filters have a pole frequency of 
+\begin_inset Formula $10^{5}$
+\end_inset
+
+ rad/s and a constant gain of 0.8 in their operating region.
+ This is evident from their magnitude response plots.
+\end_layout
+
+\begin_layout Enumerate
+The step response of the low pass filter starts from zero (due to initial
+ conditions) and stabilises at a DC value of 0.8.
+\end_layout
+
+\begin_layout Enumerate
+The step response of the high pass filter starts from 0.8 (due to initial
+ conditions) and stabilises at a very low value close to zero.
+\end_layout
+
+\begin_layout Enumerate
+When the sum of sinusoids signal is passed through the LPF, the 1kHz component
+ gets filtered out with a gain of 0.8.
+\end_layout
+
+\begin_layout Enumerate
+When the sum of sinusoids signal is passed through the HPF, the 1MHz component
+ gets filtered out with a gain of 0.8.
+\end_layout
+
+\begin_layout Enumerate
+When the low frequency damped sinusoid is passed through the LPF, the output
+ is not so much different from the input.
+\end_layout
+
+\begin_layout Enumerate
+When the low frequency damped sinusoid is passed through the HPF, the output
+ is highly attenuated.
+ It starts from 0.8 due to initial conditions.
+\end_layout
+
+\begin_layout Enumerate
+When the high frequency damped sinusoid is passed through the LPF, the output
+ is highly attenuated (Evident from the y-axis scale)
+\end_layout
+
+\begin_layout Enumerate
+When the high frequency damped sinusoid is passed through the HPF, the output
+ is not so much different from the input.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,691 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 6
+\begin_inset Newline linebreak
+\end_inset
+
+Tubelight Simulations
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+April 11, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of the assignment is to:
+\end_layout
+
+\begin_layout Enumerate
+Simulate the environment inside a tubelight using Python
+\end_layout
+
+\begin_layout Enumerate
+Solve for the steady state light intensity profile
+\end_layout
+
+\begin_layout Enumerate
+Plot the electron phase space plots, position and light intensity histograms
+\end_layout
+
+\begin_layout Section
+Thoery:
+\end_layout
+
+\begin_layout Subsection
+Physics behind the working of tubelight:
+\end_layout
+
+\begin_layout Standard
+Inside the tubelight, electrons are injected from the cathode into the tube
+ periodically.
+ And the number of electrons is random with some standard deviation and
+ a mean.
+ The electrons accelerate under the external electric field and move in
+ the tubelight.
+ They gain velocity in the porcess and once, they get enough threshold velocity,
+ they can bombard with the surrounding elctrons and can emit light in the
+ process.
+ This collision process is again random, i.e., the energised electrons need
+ not undergo collision always.
+ However, they are assumed to undergo inelastic collision and hence, stop
+ at that location and light is emitted in the process.
+ Once the electrons reach the anode, they immediately travel back to the
+ cathode through the external loop and again repeat the process as long
+ as the electric field is present (Switch is ON).
+\end_layout
+
+\begin_layout Subsection
+Dark spaces:
+\end_layout
+
+\begin_layout Standard
+As we all know, there can be some dark spaces in a tubelight.
+ These are the locations which are usually dark, meaning collisions won't
+ happen frequently there when compared to other locations.
+ These locations are also qualitatively found in this assignment.
+ They are the local minimas present in the histogram of the intensity population
+ plot.
+\end_layout
+
+\begin_layout Section
+Procedure:
+\end_layout
+
+\begin_layout Subsection
+Variables used:
+\end_layout
+
+\begin_layout Enumerate
+xx = Vector to store the positions of electrons
+\end_layout
+
+\begin_layout Enumerate
+u = Vector to store the speeds of electrons
+\end_layout
+
+\begin_layout Enumerate
+dx = Vector to store the instantaneous displacements of the electrons
+\end_layout
+
+\begin_layout Enumerate
+I = List to store the positions of energetic electrons which had undergone
+ collision
+\end_layout
+
+\begin_layout Enumerate
+X = List to store the positions of all electrons
+\end_layout
+
+\begin_layout Enumerate
+V = List to store the velocities of all electrons
+\end_layout
+
+\begin_layout Subsection
+Parameters used:
+\end_layout
+
+\begin_layout Enumerate
+Tube length (in terms of number of divisions) = n (100 by default)
+\end_layout
+
+\begin_layout Enumerate
+Average number of electrons injected per timestep = M (10 by default)
+\end_layout
+
+\begin_layout Enumerate
+Standard deviation in the number of electrons = Msig (2 by default)
+\end_layout
+
+\begin_layout Enumerate
+Number of iterations to be performed = nk (500 by default)
+\end_layout
+
+\begin_layout Enumerate
+Threshold excitation speed = u0 (5 by default)
+\end_layout
+
+\begin_layout Enumerate
+Probability of collision = p (0.25 by default)
+\end_layout
+
+\begin_layout Standard
+Note: All the plots shown in this graph are with respect to the default
+ values
+\end_layout
+
+\begin_layout Subsection
+Main code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for i in range(nk):
+\end_layout
+
+\begin_layout Plain Layout
+
+    ii = pl.where(xx>0)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    dx[ii] = u[ii]+0.5
+\end_layout
+
+\begin_layout Plain Layout
+
+    xx[ii] = xx[ii]+dx[ii]
+\end_layout
+
+\begin_layout Plain Layout
+
+    u[ii] = u[ii]+1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    end = pl.where(xx[ii]>n)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    xx[ii[end]] = 0; u[ii[end]] = 0; dx[ii[end]] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+    non_zero_x = pl.array(list(set(ii)-set(ii[end])),dtype=int)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    kk = pl.where(u[non_zero_x]>=u0)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    ll = pl.where(pl.rand(len(kk))<=p)[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+    kl = non_zero_x[kk[ll]]
+\end_layout
+
+\begin_layout Plain Layout
+
+    u[kl] = 0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    rho = pl.rand(len(kl))
+\end_layout
+
+\begin_layout Plain Layout
+
+    xx[kl] = xx[kl]-(dx[kl]*rho)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    m = int((pl.randn()*Msig)+M)
+\end_layout
+
+\begin_layout Plain Layout
+
+    space_inds = pl.array(list(set(all_inds)-set(non_zero_x)),dtype=int)
+\end_layout
+
+\begin_layout Plain Layout
+
+    slotnum = min(len(space_inds),m)
+\end_layout
+
+\begin_layout Plain Layout
+
+    xx[space_inds[:slotnum]] = 1; u[space_inds[:slotnum]] = 0; dx[space_inds[:sl
+otnum]] = 0; 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    I.extend(xx[kl].tolist())
+\end_layout
+
+\begin_layout Plain Layout
+
+    X.extend(xx.tolist())
+\end_layout
+
+\begin_layout Plain Layout
+
+    V.extend(u.tolist())
+\end_layout
+
+\end_inset
+
+This is the important code snippet of the program.
+ This for loop basically iterates over the number of timesteps (say 500)
+ and in each timestep, the following updates are done:
+\end_layout
+
+\begin_layout Enumerate
+The positions and speeds of electrons which have 
+\begin_inset Formula $x$
+\end_inset
+
+>0 (Which are inside the tube) are updated.
+\end_layout
+
+\begin_layout Enumerate
+The electrons whose 
+\begin_inset Formula $x$
+\end_inset
+
+ value is more than 
+\begin_inset Formula $n$
+\end_inset
+
+ (Tube length) are reset to zero state (x=0,dx=0,u=0 meaning they are waiting
+ at the cathode to be injected again).
+\end_layout
+
+\begin_layout Enumerate
+Out of the electrons with speed more than 
+\begin_inset Formula $u$
+\end_inset
+
+0, some are assumed to undergo collision (based on the 
+\begin_inset Formula $p$
+\end_inset
+
+ value) and hence, their speeds are reset to zero (Inelastic collision).
+\end_layout
+
+\begin_layout Enumerate
+Also the positions of electrons, which have undergone collision, are updated
+ as 
+\begin_inset Formula $x[$
+\end_inset
+
+i] = 
+\begin_inset Formula $x$
+\end_inset
+
+[i] - (
+\begin_inset Formula $dx$
+\end_inset
+
+[i]*
+\begin_inset Formula $\rho$
+\end_inset
+
+) where 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is a random number in the interval 
+\begin_inset Formula $[0,1].$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Electrons at the cathode are allocated slots based on the availability of
+ vacancies (
+\begin_inset Formula $x$
+\end_inset
+
+=0 means a vacancy)
+\end_layout
+
+\begin_layout Enumerate
+The I, X, V lists are updated.
+\end_layout
+
+\begin_layout Section
+Observations and plots:
+\end_layout
+
+\begin_layout Subsection
+Intensity population plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_0.png
+	scale 70
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Intensity histogram for default values
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_5.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Intensity histogram for u0 = 7, p = 0.5 with other parameters unchanged
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Position population plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_1.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Most electrons are concentrated at x=1 since electrons are injected there
+ at every timestep
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Speed population plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_2.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Most of the electrons collide before reaching speeds more than 6 to 7 and
+ completely cease to exist at speeds 15 or more
+\end_layout
+
+\begin_layout Subsection
+Electron phase space plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_3.png
+	scale 60
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Most electrons exist at rest at different locations.
+ However, they have higher velocities only near the anode
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusions:
+\end_layout
+
+\begin_layout Enumerate
+The intensity plots have their maximum at the distance where the velocity
+ would be approximately 
+\begin_inset Formula $u0.$
+\end_inset
+
+ Let's say 
+\begin_inset Formula $u0=7$
+\end_inset
+
+ and acceleration is 1.
+ Hence, the time required to acquire this velocity from rest is 7 seconds.
+ Now, the distance travelled will be 
+\begin_inset Formula $x=\frac{1}{2}at^{2}=0.5(7^{2})=24.5$
+\end_inset
+
+ and the second intensity histogram has its global maximum around that location.
+\end_layout
+
+\begin_layout Enumerate
+The position and speed histograms show that the electrons with primarily
+ concentrated at the location 
+\begin_inset Formula $x=1$
+\end_inset
+
+ with speed 
+\begin_inset Formula $u=0.$
+\end_inset
+
+ This is because at every timestep, electrons are injected into the tube
+ with these initial conditions.
+\end_layout
+
+\begin_layout Enumerate
+From the electron phase space plot, we can conclude that the electrons virtually
+ cease to exist at speeds more than 14 for 
+\begin_inset Formula $u0=5$
+\end_inset
+
+.
+ Also, these high velocity electrons are present near the anode only.
+ The electrons with lower velocities are present all over the tube.
+\end_layout
+
+\end_body
+\end_document

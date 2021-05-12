@@ -1,0 +1,2423 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{graphicx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "language=python"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\series bold
+EE2703: Applied Programming Lab
+\begin_inset Newline linebreak
+\end_inset
+
+Assignment 8
+\begin_inset Newline linebreak
+\end_inset
+
+The Digital Fourier Transform
+\begin_inset Newline linebreak
+\end_inset
+
+
+\begin_inset Newline linebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+
+\size largest
+V.
+ Ruban Vishnu Pandian
+\begin_inset Newline newline
+\end_inset
+
+EE19B138
+\size larger
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+
+\size largest
+May 7, 2021
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace*{
+\backslash
+fill}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Aim:
+\end_layout
+
+\begin_layout Standard
+The aim of this assignment is to:
+\end_layout
+
+\begin_layout Enumerate
+Learn Digital fourier transform (DFT) and its properties.
+\end_layout
+
+\begin_layout Enumerate
+Use the in-built Python library to generate DFT of various discrete-time
+ signals using the Fast fourier transform (FFT) algorithm.
+\end_layout
+
+\begin_layout Enumerate
+Analyse the continuous time fourier transform (CTFT) of continuous-time
+ signals by plotting the DFT of their sampled DT versions.
+\end_layout
+
+\begin_layout Section
+Theory:
+\end_layout
+
+\begin_layout Subsection
+Sampling:
+\end_layout
+
+\begin_layout Standard
+Sampling is an important concept in digital signal processing.
+ It is the process of creating a discrete-time signal from a known continuous-ti
+me signal by sampling it at regular time intervals.
+ Also, all the digital devices and computers we use can perform arithmetic
+ and algorithms only on discrete data.
+ Hence, sampling is a very important concept in signal processing.
+ 
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Let's say the CT signal is 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+.
+ Now the sampled DT signal will be:
+\begin_inset Formula 
+\[
+x[n]=x_{c}(t)|_{t=nT_{s}}=x_{c}(nT_{s})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+ is known as sampling period.
+ The associated sampling frequency is:
+\begin_inset Formula 
+\[
+𝛺_{s}=\frac{2\pi}{T_{s}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+(In this report, 𝛺 denotes frequency in CT signals and 𝜔 denotes frequency
+ in DT signals)
+\end_layout
+
+\begin_layout Subsection
+Nyquist-Shannon sampling theorem:
+\end_layout
+
+\begin_layout Standard
+Whenever we sample a CT signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ and obtain a DT signal 
+\begin_inset Formula $x[n]$
+\end_inset
+
+, their spectra: 
+\begin_inset Formula $X_{c}(𝛺)$
+\end_inset
+
+ and 
+\begin_inset Formula $X(𝜔)$
+\end_inset
+
+ are related as:
+\begin_inset Formula 
+\[
+X(𝜔)=\frac{1}{T_{s}}\sum_{k=-\infty}^{\infty}X_{c}(\frac{𝜔}{T_{s}}-k\frac{2\pi}{T_{s}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, the Nyquist-Shannon sampling theorem states:
+\end_layout
+
+\begin_layout Standard
+For a bandlimited signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+, the sampling frequency 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+ should be atleast twice the maximum frequency present in the spectrum of
+ 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ in order to prevent overlapping (or Aliasing).
+ Only if this condition is satisfied, the DTFT of 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ will preserve the original information about the CT signal.
+ A visual representation is shown below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/bandlim.png
+	scale 26
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The spectrum of the CT signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ (Bandlimited)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/spectrum.png
+	scale 26
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The time-scaled version of DTFT of signal 
+\begin_inset Formula $x[n]$
+\end_inset
+
+.
+ Clearly, depending on 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+, we may or may not have aliasing
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+To avoid overlapping, we need to satisfy the condition: 
+\begin_inset Formula $f_{s}-B>B$
+\end_inset
+
+ or 
+\begin_inset Formula $f_{s}>2B$
+\end_inset
+
+.
+ Hence, the sampling frequency should be atleast twice the maximum frequency
+ present in the CT signal to avoid overlapping.
+\end_layout
+
+\begin_layout Subsection
+Digital fourier transform:
+\end_layout
+
+\begin_layout Standard
+Digital fourier transform (DFT) is an important concept in digital signal
+ processing.
+ As we already saw, we have a continuous variable spectrum pertaining to
+ DT signals known as Dsicrete-time fourier transform (DTFT) which is given
+ by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(w)=\sum_{n=-\infty}^{\infty}x[n]e^{-jwn}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This is a real variable function and is defined for a continuum of values.
+ DFT, on the other hand, is a discrete variable signal and is defined only
+ for certain integer values.
+ Let's assume we have an N-periodic DT signal, i.e., if we know its first
+ N samples 
+\begin_inset Formula $(x[0],x[1],...x[N-1])$
+\end_inset
+
+, we know the full signal.
+ Now, its DFT is defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a[k]=\sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x[n]=\sum_{k=0}^{N-1}\frac{a[k]}{N}e^{j\frac{2\pi}{N}kn}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+and both
+\series default
+ 
+\series medium
+k and n belong to the set 
+\begin_inset Formula ${0,1,2,...N-1}.$
+\end_inset
+
+ Also, the DT signal x[n] calculated by the inverse DFT formula is inherently
+ periodic with period 'N'.
+ Hence, DFT is usually used to analyse periodic DT signals.
+ Their values present in one single period contains all information about
+ that signal and its DFT.
+ Note that both 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ and its DFT 
+\begin_inset Formula $a[k]$
+\end_inset
+
+ are periodic with period as 'N' samples.
+\end_layout
+
+\begin_layout Subsection
+Connection between CTFT and DFT:
+\end_layout
+
+\begin_layout Standard
+Let's say we have a finite length CT signal and this signal, when periodically
+ extended and sampled, gives us a DT signal.
+ Let us define the following functions:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $x(t)$
+\end_inset
+
+ = Finite length CT signal of length 
+\begin_inset Formula $T_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $X_{fin}(𝛺)$
+\end_inset
+
+ = CTFT of 
+\begin_inset Formula $x(t)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ = Periodic extension of 
+\begin_inset Formula $x(t)$
+\end_inset
+
+ with period 
+\begin_inset Formula $T_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $𝛺_{0}$
+\end_inset
+
+= Fundamental frequency of 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ = 
+\begin_inset Formula $\frac{2\pi}{T_{0}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $a_{k}$
+\end_inset
+
+= 
+\begin_inset Formula $k^{th}$
+\end_inset
+
+ CTFS coefficient of 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $X_{c}(𝛺)$
+\end_inset
+
+ = CTFT of periodic CT signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $x[n]$
+\end_inset
+
+ = Sampled version of 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+, i.e., 
+\begin_inset Formula $x_{c}(nT_{s})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+= Sampling frequency = 
+\begin_inset Formula $\frac{2\pi}{T_{s}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $𝜔_{o}$
+\end_inset
+
+= DFT resolution frequency = 
+\begin_inset Formula $\frac{2\pi}{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $X(𝜔)$
+\end_inset
+
+ = DTFT of signal 
+\begin_inset Formula $x[n]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $a[k]$
+\end_inset
+
+ = 
+\begin_inset Formula $k^{th}$
+\end_inset
+
+ DFT coefficient of signal 
+\begin_inset Formula $x[n]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Let's assume the first N samples that define 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ are given by sampling the 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ period signal 
+\begin_inset Formula $x(t).$
+\end_inset
+
+ Hence, 
+\begin_inset Formula $T_{s}=\frac{T_{0}}{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have the following 
+\series bold
+important
+\series default
+ equations which relate the spectra of CT signal and the sampled DT signal:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+X_{fin}(k𝛺_{o})=T_{o}a_{k}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+X_{c}(𝛺)=\sum_{k=-\infty}^{\infty}2\pi a_{k}\delta(𝛺-k𝛺_{o})
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+X(\omega)=\frac{1}{T_{s}}\sum_{k=-\infty}^{\infty}X_{c}(\frac{\omega}{T_{s}}-k\frac{2\pi}{T_{s}})
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+X(𝜔)=\sum_{k=0}^{N-1}\frac{2\pi a[k]}{N}𝛿(𝜔-k𝜔_{o})
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+(The last equation relates the DTFT and DFT of periodic DT signal 
+\begin_inset Formula $x[n]$
+\end_inset
+
+ in the first period [-
+\begin_inset Formula $\pi$
+\end_inset
+
+,
+\begin_inset Formula $\pi$
+\end_inset
+
+).)
+\end_layout
+
+\begin_layout Standard
+Now, let's assume that the CTFT of the periodic CT signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ is bandlimited (or) atleast has a decreasing trend in the fourier series
+ coefficients such that we can assume that the spectrum is approximately
+ bandlimited after a particular value of 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Now, we can choose a sampling frequency 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+ such that the Nyquist criteria is met, i.e., 
+\begin_inset Formula $𝛺_{s}>2𝛺_{m}$
+\end_inset
+
+ where 
+\begin_inset Formula $𝛺_{m}$
+\end_inset
+
+ is the maximum frequency component present in 
+\begin_inset Formula $X_{c}(𝛺).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Any CT frequency 
+\begin_inset Formula $𝛺$
+\end_inset
+
+ we have will become 
+\begin_inset Formula $𝛺T_{s}$
+\end_inset
+
+ in the DT domain.
+ Hence, a freqeuncy of 
+\begin_inset Formula $\frac{𝛺_{s}}{2}$
+\end_inset
+
+ in CT domain becomes 
+\begin_inset Formula $\frac{𝛺_{s}T_{s}}{2}=\pi$
+\end_inset
+
+ in the DT domain.
+ So, a range of [
+\begin_inset Formula $-𝛺_{s}$
+\end_inset
+
+,
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+) in CT domain becomes [-
+\begin_inset Formula $\pi$
+\end_inset
+
+,
+\begin_inset Formula $\pi$
+\end_inset
+
+) in the DT domain.
+ Also, since the Nyquist criteria is assumed to be satisfied, we can safely
+ say:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+X(\omega)=\frac{1}{T_{s}}X_{c}(\frac{\omega}{T_{s}})
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+for 
+\begin_inset Formula $𝜔\in[-\pi,\pi)$
+\end_inset
+
+.
+ We are able to get this equation only because Nyquist criteria is satisfied.
+ Else, the shifted spectrum terms will also contribute to 
+\begin_inset Formula $X(\omega).$
+\end_inset
+
+With this assumption, let's see how 
+\begin_inset Formula $X(\omega)$
+\end_inset
+
+ will be related to the DFT coefficients.
+ From equation 
+\begin_inset Formula $(4),(5),$
+\end_inset
+
+we can say:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+X_{c}(\frac{𝜔}{T_{s}})=\sum_{k=0}^{N-1}\frac{2\pi.T_{s}.a[k]}{N}𝛿(𝜔-k𝜔_{o})=\sum_{k=-\infty}^{\infty}2\pi a_{k}\delta(\frac{𝜔}{T_{s}}-k\frac{2\pi}{T_{o}})=\sum_{k=-\infty}^{\infty}2\pi.T_{s}.a_{k}\delta(𝜔-k\frac{2\pi}{N})
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Since, we have assumed that the CTFS coefficients are limited within [-
+\begin_inset Formula $\frac{𝛺_{s}}{2}$
+\end_inset
+
+,
+\begin_inset Formula $\frac{𝛺_{s}}{2}$
+\end_inset
+
+) in the CT domain, they will be restricted in [-
+\begin_inset Formula $\pi$
+\end_inset
+
+,
+\begin_inset Formula $\pi$
+\end_inset
+
+) on the DT domain (or) the w-axis.
+ So, our eqn.
+ 
+\begin_inset Formula $(6)$
+\end_inset
+
+ reduces to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{k=-\frac{N}{2}}^{\frac{N}{2}-1}\frac{2\pi.T_{s}.a[k]}{N}𝛿(𝜔-k𝜔_{o})=\sum_{k=-\frac{N}{2}}^{\frac{N}{2}-1}2\pi.T_{s}.a_{k}\delta(𝜔-k\frac{2\pi}{N})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, we have: 
+\begin_inset Formula 
+\begin{equation}
+a_{k}=\frac{a[k]}{N}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now, we also have:
+\begin_inset Formula 
+\begin{equation}
+X_{fin}(k𝛺_{o})=T_{o}a_{k}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+From eqns.
+ 
+\begin_inset Formula $(7),(8),$
+\end_inset
+
+we can say:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+X_{fin}(k𝛺_{o})=T_{o}\frac{a[k]}{N}=T_{s}a[k]
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The final takeaway point is that if we can safely assume the signal is bandlimit
+ed and the sampling frequency satisfies the Nyquist criteria, then the CTFT
+ of the finite length CT signal 
+\begin_inset Formula $x(t)$
+\end_inset
+
+ can be computed at integer values of frequency 
+\begin_inset Formula $𝛺_{o}$
+\end_inset
+
+ by multiplying the N-point DFT of the sampled version by 
+\begin_inset Formula $T_{s}.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+CT frequency interval : [
+\begin_inset Formula $\frac{-\pi.N}{T_{o}}$
+\end_inset
+
+,
+\begin_inset Formula $\frac{\pi.N}{T_{o}}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+CT frequency least count : 
+\begin_inset Formula $𝛺_{o}=\frac{2\pi}{T_{0}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, to get the CTFT for a higher range, we can either increase 
+\begin_inset Formula $N$
+\end_inset
+
+ or decrease 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ or do both.
+ However, the resolution can be improved only by increasing 
+\begin_inset Formula $T_{o}.$
+\end_inset
+
+ Hence, when we aim to increase the resolution, the range automatically
+ gets shortened.
+ To maintain the same range, we need to proportionately increase 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Assignment:
+\end_layout
+
+\begin_layout Subsection
+Spectrum of 
+\begin_inset Formula $sin(5t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Sin(5t) is a very simple continuous time periodic function.
+ Let's analyse some of its parameters and properties:
+\end_layout
+
+\begin_layout Itemize
+Has a single CT freqeuncy of 
+\begin_inset Formula $𝛺=5$
+\end_inset
+
+ rad/s.
+\end_layout
+
+\begin_layout Itemize
+Spectrum is bandlimited, i.e., only two impulses are present at 
+\begin_inset Formula $𝛺=\pm5$
+\end_inset
+
+ rad/s.
+\end_layout
+
+\begin_layout Itemize
+Since it is periodic, its CTFT will have impulses.
+ So, its better to plot its CTFS coefficients.
+\end_layout
+
+\begin_layout Standard
+We can write sin(5t) as:
+\begin_inset Formula 
+\[
+sin(5t)=\frac{e^{j5t}-e^{-j5t}}{2j}=-0.5je^{j5t}+0.5je^{-j5t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, the CTFS coefficients are -0.5j and 0.5j.
+ To get this plot using the DFT of the sampled version, we need to satisfy
+ the Nyquist criteria.
+ Also, for the Fast fourier transform (FFT) algorithm to work faster, we
+ need to choose an 
+\begin_inset Formula $N$
+\end_inset
+
+ which is a power of 2.
+ Hence, let's choose 
+\begin_inset Formula $N=128.$
+\end_inset
+
+ Also, let the finite length signal whose periodic representation is 
+\begin_inset Formula $sin(5t)$
+\end_inset
+
+ have a length of 
+\begin_inset Formula $2\pi$
+\end_inset
+
+, i.e., it is 
+\begin_inset Formula $sin(5t)$
+\end_inset
+
+ for 
+\begin_inset Formula $t\in[0,2\pi$
+\end_inset
+
+) and zero outside.
+ Hence, 
+\begin_inset Formula $T_{o}=2\pi$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $T_{s}=\frac{2\pi}{128}$
+\end_inset
+
+ and 
+\begin_inset Formula $𝛺_{s}=128$
+\end_inset
+
+.
+ Clearly, 
+\begin_inset Formula $128>2*5=10.$
+\end_inset
+
+ Hence, Nyquist criteria is also satisfied.
+ Now, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{k}=\frac{a[k]}{N}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+So in our code, after finding the DFT coefficients, we should divide the
+ vector by 
+\begin_inset Formula $N$
+\end_inset
+
+ to get the CTFS coefficients.
+ After doing all that and plotting the magnitude and phase response plots,
+ we have the following plot:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_1.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+There are peaks of length 0.5 at 
+\begin_inset Formula $𝛺_{o}=\pm5$
+\end_inset
+
+ as expected
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The phase is 
+\begin_inset Formula $\frac{\pi}{2}$
+\end_inset
+
+ at 
+\series default
+
+\begin_inset Formula $𝛺_{o}=-5$
+\end_inset
+
+ 
+\series medium
+and 
+\begin_inset Formula $\frac{-\pi}{2}$
+\end_inset
+
+ at 
+\series default
+
+\begin_inset Formula $𝛺_{o}=5$
+\end_inset
+
+ 
+\series medium
+as expected.
+ Hence, the plot is correct.
+ To get a more precise plot, we need to increase 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ as resolution will increase but at the same time, we should increase 
+\begin_inset Formula $N$
+\end_inset
+
+ to maintain the same frequency range for which the CTFT (or CTFS) is calculated.
+ The plot given below is for 
+\begin_inset Formula $N=1024$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{o}=8\pi$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_2.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+A much more accurate plot with better resolution
+\end_layout
+
+\begin_layout Subsection
+Spectrum of amplitude modulated signal:
+\end_layout
+
+\begin_layout Standard
+AM modulation is a common technique used in communication of signals.
+ A signal which is to be transmitted, will be modulated over a carrier frequency
+ so that the modulated signal can be transmitted using antennas of small
+ length.
+ The modulated signal can be again converted back to the original signal
+ using signal processing techniques on the reciever end.
+ Let us consider the following example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x(t)=(1+0.1cos(t))cos(10t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The properties of this signal are:
+\end_layout
+
+\begin_layout Itemize
+Has three CT frequencies of 
+\begin_inset Formula $𝛺=9,10,11$
+\end_inset
+
+ rad/s.
+\end_layout
+
+\begin_layout Itemize
+Spectrum is bandlimited, i.e., only two impulses are present at 
+\begin_inset Formula $𝛺=\pm9,\pm10,\pm11$
+\end_inset
+
+ rad/s.
+\end_layout
+
+\begin_layout Itemize
+Since it is periodic, its CTFT will have impulses.
+ So, its better to plot its CTFS coefficients.
+\end_layout
+
+\begin_layout Standard
+We can write this signal as:
+\begin_inset Formula 
+\[
+x(t)=0.025e^{j9t}+0.025e^{-j9t}+0.5e^{j10t}+0.5e^{-j10t}+0.025e^{j11t}+0.025e^{-j11t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+In this question, let's assume we choose 
+\begin_inset Formula $T_{o}=2\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=128$
+\end_inset
+
+.
+ Now, the least count is 
+\series default
+
+\begin_inset Formula $\mathit{\Omega}_{0}=\frac{2\pi}{T_{0}}=1$
+\end_inset
+
+
+\series medium
+rad/s.
+
+\series default
+ 
+\series medium
+And the CT frequencies we have also differ by 1 rad/s.
+ Hence, when we plot, we won't get distinct impulses.
+ We will get an interpolated plot which is wrong.
+ The plot is given below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_3.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We get interpolated plot which is not correct
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+To resolve this problem, we need to set the least count less than 1.
+ Our previous least count was 
+\series default
+
+\begin_inset Formula $\mathit{\Omega}_{0}=\frac{2\pi}{T_{0}}=1$
+\end_inset
+
+
+\series medium
+rad/s.
+ Now, let's say 
+\begin_inset Formula $T_{o}=8\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=1024.$
+\end_inset
+
+ Now, the new least count is 
+\series default
+
+\begin_inset Formula $\mathit{\Omega}_{0}=\frac{2\pi}{T_{0}}=0.25$
+\end_inset
+
+
+\series medium
+ rad/s.
+ Clearly, now we won't have any wrong interpolation and the graph will be
+ much better and visually appealing.
+ The plot will be:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_4.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The plot contains magnitudes which are exactly same as the mathematical
+ results we got and the phases are also zero at those frequencies
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Spectrum of 
+\begin_inset Formula $sin^{3}(t),cos^{3}(t):$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Both signals the 
+\begin_inset Formula $sin^{3}(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $cos^{3}(t)$
+\end_inset
+
+ are periodic with bandlimited spectrum.
+ We can write them as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+sin^{3}(t)=\frac{3}{4}sin(t)-\frac{1}{4}sin(3t)=-0.375je^{jt}+0.375je^{-jt}+0.125je^{j3t}-0.125je^{-j3t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cos^{3}(t)=\frac{3}{4}cos(t)+\frac{1}{4}cos(3t)=0.375e^{jt}+0.375e^{-jt}+0.125e^{j3t}+0.125e^{-j3t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, the spectrum of both the signals will contain distinct impulses at
+ frequencies 1 and 3 rad/s.
+ the plots are given below:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_5.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+As expected we have peaks of lengths 0.375 and 0.125.
+ Also, we have the phases as -
+\begin_inset Formula $\pi/2$
+\end_inset
+
+ and 
+\begin_inset Formula $\pi/2$
+\end_inset
+
+ at the correct frequencies
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_6.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Similar to previous graph, we have peaks of lengths 0.375 and 0.125.
+ However, now the phases are purely zero as expected
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+(Both these plots are generated for 
+\begin_inset Formula $N=1024$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{o}=8\pi$
+\end_inset
+
+.
+ Hence, Nyquist criteria is also met since 
+\begin_inset Formula $𝛺_{s}=\frac{2\pi}{T_{s}}=256>2*3$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Subsection
+Spectrum of frequency modulated signal:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Note:
+\series default
+ Only in this section, both 
+\begin_inset Formula $𝛺\text{ and }𝜔$
+\end_inset
+
+ denote CT frequencies.
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Sometimes, signals are also freqeuncy modulated before transmission.
+ One such example is:
+\series default
+
+\begin_inset Formula 
+\[
+x(t)=cos(20t+5cos(t))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+We can write this function as a sum of complex exponentials based on the
+ 
+\series default
+Laurent's expansion of Bessel's function
+\series medium
+: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+exp(\frac{\beta}{2}(z-\frac{1}{z}))=\sum_{k=-\infty}^{\infty}J_{k}(\beta)z^{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Substituting 
+\begin_inset Formula $z=jexp(jw_{m}t)$
+\end_inset
+
+, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+exp(j\beta cos(w_{m}t))=\sum_{k=-\infty}^{\infty}J_{k}(\beta)j^{k}exp(jkw_{m}t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, we have: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cos(w_{c}t+\beta cos(w_{m}t))=Re\{exp(jw_{c}t+j\beta cos(w_{m}t))\}=Re\{e^{jw_{c}t}\sum_{k=-\infty}^{\infty}J_{k}(\beta)e^{j(w_{m}t+\frac{\pi}{2})k}\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cos(w_{c}t+\beta cos(w_{m}t))=\sum_{k=-\infty}^{\infty}J_{k}(\beta)cos(w_{c}t+kw_{m}t+k\frac{\pi}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Writing this as a sum of sinusoids, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cos(w_{c}t+\beta cos(w_{m}t))=\sum_{k=-\infty}^{\infty}\frac{J_{k}(\beta)}{2}e^{(w_{c}t+kw_{m}t+k\frac{\pi}{2})}+\sum_{k=-\infty}^{\infty}\frac{J_{k}(\beta)}{2}e^{-(w_{c}t+kw_{m}t+k\frac{\pi}{2})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, when we plot the CTFT, we will have impulses of length 
+\begin_inset Formula $J_{k}(\beta)/2$
+\end_inset
+
+ centered around 
+\begin_inset Formula $w_{c}$
+\end_inset
+
+ and 
+\begin_inset Formula $-w_{c}$
+\end_inset
+
+.
+ Also, the phase of the impulses will depend on the 
+\begin_inset Formula $k$
+\end_inset
+
+ value.
+ The fourier coefficients, i.e., 
+\begin_inset Formula $\frac{J_{k}(\beta)}{2}j^{k}$
+\end_inset
+
+ are plotted for 
+\begin_inset Formula $\beta=5$
+\end_inset
+
+ and 
+\begin_inset Formula $w_{m}=1$
+\end_inset
+
+ as given in the question:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_16.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, we have an idea about the fourier coefficients of the FM signal.
+ We see that the signal has a bandlimited spectrum with the maximum frequency
+ at 
+\begin_inset Formula $w=\pm10$
+\end_inset
+
+ rad/s.
+ So, in order to prevent aliasing, we just need to choose a sufficient 
+\begin_inset Formula $N.$
+\end_inset
+
+ Let's assume 
+\begin_inset Formula $T_{o}=32\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $N=4096.$
+\end_inset
+
+ Hence, maximum frequency is 
+\begin_inset Formula $\frac{𝛺_{s}}{2}=4096\frac{\pi}{32\pi}=128>(20+10)=30.$
+\end_inset
+
+ Hence, we can safely assume that the Nyquist criteria is satisfied.
+ (We consider 20+10 and not just 10 since now, the impulses will be around
+ 
+\begin_inset Formula $w_{c}=20.$
+\end_inset
+
+ Hence, we need to check whether 
+\begin_inset Formula $w_{c}+10$
+\end_inset
+
+ is less than 
+\begin_inset Formula $\frac{𝛺_{s}}{2}).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_7.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We have peaks at frequency 
+\begin_inset Formula $𝛺=20$
+\end_inset
+
+ and a few frequenices surrounding it.
+ Also, the magnitude response is even and the phase response is odd since
+ the CT signal is real
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+The plot obtained from DFT exactly matches with the Bessel's function plot
+ generated manually.
+ Hence, the DFT gave an accurate plot of the CTFS of the FM signal.
+\end_layout
+
+\begin_layout Paragraph
+Note:
+\series medium
+ The theory about CTFS of FM modulated signal and the relation with Bessel's
+ functions was referred from this link:
+\series default
+ 
+\color blue
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://www.dsprelated.com/freebooks/mdft/Sinusoidal_Frequency_Modulation_FM.html
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection
+Spectrum of the Gaussian signal:
+\end_layout
+
+\begin_layout Standard
+This Gaussian function is a special signal.
+ Unlike the previous signals, this is a non-periodic sugnal and also the
+ spectrum is not bandlimited.
+ This is because Gaussian is a 
+\series bold
+self-function, 
+\series default
+i.e., it is it's won fourier transform.
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Let the signal be of the form:
+\begin_inset Formula 
+\[
+x(t)=exp(\frac{-t^{2}}{2\sigma^{2}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the continuous time fourier transform of this signal will be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(𝛺)=\sqrt{2\pi\sigma^{2}}exp(\frac{-𝛺^{2}\sigma^{2}}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+In the example given in the assignment, 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+.
+ Hence, the expected plot should be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(𝛺)=\sqrt{2\pi}exp(\frac{-𝛺^{2}}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Now, before procceding forward, we must first analyse some important properties
+ of the signal and make some valid approximations based on that.
+ The following properties are important:
+\end_layout
+
+\begin_layout Itemize
+It is not a bandlimited signal (Satisfying Nyquist criteria exactly is impossibl
+e)
+\end_layout
+
+\begin_layout Itemize
+It is a non-periodic signal
+\end_layout
+
+\begin_layout Itemize
+It is a steeply decreasing positive even function and almost looks like
+ a finite length signal
+\end_layout
+
+\begin_layout Standard
+Since, the gaussian is a non-periodic signal, it's CTFT won't necessarily
+ have impulses (Infact, it doesn't have any as we have already derived its
+ CTFT).
+ So, in order to apply the DFT concepts on it, we must first make a periodic
+ CT signal out of it and sample it.
+ Let's first define a new finite length signal like this:
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+\begin_inset Formula 
+\[
+x_{finite}(t)=exp(\frac{-t^{2}}{2})\forall t\in[-\frac{T_{o}}{2},\frac{T_{o}}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the signal is zero outside this interval.
+ This new function is not the same gaussian function but a finite piece
+ (or window) of it is taken.
+ Now, let's find its CTFT:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(Ω)=\int_{-\infty}^{\infty}exp(\frac{-t^{2}}{2})exp(-jΩt)dt≈\int_{-T_{o}/2}^{T_{o}/2}exp(\frac{-t^{2}}{2})exp(-jΩt)dt
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, the CTFT of the new finite length function is approximately equal
+ to the CTFT of the Gaussian function.
+ 
+\series default
+This is the first assumption.
+\end_layout
+
+\begin_layout Standard
+Now, this signal is periodically repeated and a new periodic signal 
+\begin_inset Formula $x_{c}(t)$
+\end_inset
+
+ is generated and sampled.
+ The first period plot of this signal for 
+\begin_inset Formula $T_{o}=20$
+\end_inset
+
+ would look like this:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_9.png
+	scale 54
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is the first period of the periodic repetition of the finite length
+ signal (
+\begin_inset Formula $T_{o}=20)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+This new periodic function has a period of 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ and hence a fundamental frequency of 
+\begin_inset Formula $\mathit{\Omega}_{0}=\frac{2\pi}{T_{0}}$
+\end_inset
+
+.
+ Hence, the signal will have CTFS coefficients at frequencies which are
+ multiples of 
+\begin_inset Formula $\mathit{\Omega}_{o}.$
+\end_inset
+
+ Now, we already proved in section (2.4) that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(k𝛺_{o})=T_{o}a_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+and we know 
+\begin_inset Formula $X(𝛺)$
+\end_inset
+
+ decreases as 
+\begin_inset Formula $𝛺$
+\end_inset
+
+ increases.
+ Hence, we can safely say the CTFS coefficients are nearly zero at high
+ values of 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Now, the only final step is to choose a sampling frequency such that we
+ can safely assume the CTFT of this periodic signal is bandlimited within
+ that range.
+ Let's choose 
+\begin_inset Formula $N=1024$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{o}=20.$
+\end_inset
+
+ Hence, 
+\begin_inset Formula $𝛺_{o}=\frac{2\pi}{T_{o}}=\frac{\pi}{10}$
+\end_inset
+
+ and 
+\begin_inset Formula $𝛺_{s}=N\frac{2\pi}{T_{o}}=1024\frac{\pi}{10}$
+\end_inset
+
+.
+ Clearly, 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+ is sufficiently high to assume that the Nyquist criteria is satisfied.
+ 
+\series default
+This is the second assumption.
+\end_layout
+
+\begin_layout Standard
+With these two assumptions in mind, we can use all the results we got in
+ section (2.4).
+ The main result which we want is the following equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X(k𝛺_{o})=T_{s}a[k]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Hence, whatever DFT coefficients vector we are getting, we need to multiply
+ it by 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+.
+ The resulting coefficients are nothing but the CTFT values of the windowed
+ Gaussian signal at integral values of 
+\begin_inset Formula $𝛺_{o}.$
+\end_inset
+
+ The plot given below is for 
+\begin_inset Formula $T_{o}=20$
+\end_inset
+
+ and 
+\begin_inset Formula $N=1024.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_8.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The curve looks very much similar to the CTFT formula we derived
+\end_layout
+
+\begin_layout Subsection
+Effect of 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ and N on the CTFT of the gaussian:
+\end_layout
+
+\begin_layout Standard
+We already derived that the least count of CT frequency is 
+\begin_inset Formula $𝛺_{o}=\frac{2\pi}{T_{o}}$
+\end_inset
+
+ and the frequency range is 
+\begin_inset Formula $[-\frac{𝛺_{s}}{2},\frac{𝛺_{s}}{2})=[-N\frac{2\pi}{T_{o}},N\frac{2\pi}{T_{o}}).$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+With these facts in mind, let's understand the important points to improve
+ the spectrum plot of the Gaussian function:
+\end_layout
+
+\begin_layout Enumerate
+Increasing 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ has two benefits:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The window of the finite length signal increases and hence, the approximation
+ is much more accurate.
+\end_layout
+
+\begin_layout Enumerate
+The resolution improves and hence, the plot will be much more smoother.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Increasing N also has two benefits:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The sampling frequency 
+\begin_inset Formula $𝛺_{s}=N\frac{2\pi}{T_{o}}$
+\end_inset
+
+ increases and hence, the assumption that the Nyquist criteria is satisfied
+ is much more credible.
+\end_layout
+
+\begin_layout Enumerate
+We can get the CTFT for a broader range of frequency as the range is determined
+ by 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Hence, we expect the graphs to become smoother with increase in period.
+ Let's see if that's the case:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_10.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_11.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_12.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_13.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_14.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+
+\series medium
+Clearly, the graph becomes smoother with increasing 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ value.
+ Also, note that the maximum frequency range for which the CTFT is calculated
+ is also decreasing because 
+\begin_inset Formula $𝛺_{s}$
+\end_inset
+
+ inversely depends on 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ for a given value of 
+\begin_inset Formula $N.$
+\end_inset
+
+ However, in all the plots, the limit of the x-axis is set to [-10,10).
+ And the lowest frequency range in these set of plots is 
+\begin_inset Formula $\frac{𝛺_{s}}{2}=512\frac{2\pi}{40}>10$
+\end_inset
+
+.
+ Hence, we aren't able to see the decreasing trend in the range of frequencies.
+\end_layout
+
+\begin_layout Paragraph
+
+\series bold
+Error plot: 
+\series medium
+As already said, whatever plots we are getting is an approximation and not
+ the exact spectrum of the gaussian.
+ That's why we are even getting phase values of 
+\begin_inset Formula $\pi$
+\end_inset
+
+ at high frequencies (Could be due to computer precision and some other
+ non-idealities).
+ However, the graph we get is fairly accurate in the significant range of
+ frequencies, i.e., where the spectrum magnitude is more than 0.001.
+ Now, let's see how the maximum error between the computed CTFT values and
+ actual CTFT values change with the period.
+ We expect a decreasing trend with increasing period as we have already
+ seen higher period means better approximation.
+ Let's see if the plot obeys this fact:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Pics/Figure_15.png
+	scale 65
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In this example, the period 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ starts from 1.5 and ranges till 150 in steps of 1.5.
+ As we expected, the error is decreasing with increasing 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusions:
+\end_layout
+
+\begin_layout Enumerate
+The spectrum plot of 
+\begin_inset Formula $sin(5t)$
+\end_inset
+
+ is exact and the CTFS coefficients are correctly computed.
+\end_layout
+
+\begin_layout Enumerate
+The spectrum plot of amplitude modulated signal is also exact.
+ Only the resolution had to be improved there to get an accurate plot.
+\end_layout
+
+\begin_layout Enumerate
+The spectra plots of signals 
+\begin_inset Formula $sin^{3}(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $cos^{3}(t)$
+\end_inset
+
+ are also exact.
+\end_layout
+
+\begin_layout Enumerate
+The spectrum plot of frequency modulated signal is very much accurate when
+ the chosen sampling frequency is sufficiently large and it exactly matched
+ the Bessel's function plot generated manually.
+\end_layout
+
+\begin_layout Enumerate
+In all the above cases, the Nyquist criteria is satisfied and hence, the
+ plots are exact.
+\end_layout
+
+\begin_layout Enumerate
+In the gaussian example, the CTFT spectrum plot obtained is very accurate
+ when the window (or period) chosen is high because of:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+High resolution
+\end_layout
+
+\begin_layout Enumerate
+Better approximation of the windowed signal with respect to the actual gaussian
+ signal
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+To improve the resolution, the only method is to increase 
+\begin_inset Formula $T_{o}.$
+\end_inset
+
+ However, we can control the maximum frequency range (For which the CTFT
+ is computed) by both 
+\begin_inset Formula $N$
+\end_inset
+
+ as well as 
+\begin_inset Formula $T_{o}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The maximum error between computed CTFT and actual CTFT decreases with increasin
+g 
+\begin_inset Formula $T_{o}$
+\end_inset
+
+ as expected.
+\end_layout
+
+\begin_layout Enumerate
+The window length 
+\begin_inset Formula $T_{o}(ideal)$
+\end_inset
+
+ must be chosen so that the periodic repetition of the windowed gaussian
+ almost mimics a sinusoid.
+ In that case, the frequency components in the periodic signal would be
+ less and hence, the Nyquist criteria will also be satisfied much more accuratel
+y.
+ 
+\end_layout
+
+\begin_layout Enumerate
+However, we have a trade-off here.
+ Any increase in the period 
+\begin_inset Formula $T_{o}(ideal)$
+\end_inset
+
+ will improve the approximation that the CTFT of the windowed signal is
+ same as the CTFT of the original gaussian.
+ However, now the periodic signal will have more frequency components and
+ hence, the Nyquist criteria may not be obeyed fully.
+ To resolve this issue, we must increase the value of 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document
